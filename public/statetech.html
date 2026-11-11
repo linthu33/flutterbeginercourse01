@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flutter State Management ရှင်းလင်းချက်</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        background-color: #f4f4f9;
+      }
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #02569b;
+        text-align: center;
+      }
+      h2 {
+        color: #02569b;
+        border-bottom: 2px solid #02569b;
+        padding-bottom: 5px;
+      }
+      p {
+        color: #333;
+        font-size: 16px;
+      }
+      /* Highlight အရောင်များကို ဖယ်ရှားထားပါသည် */
+      code {
+        padding: 2px 5px;
+        color: #d14;
+        font-weight: bold;
+      }
+      pre {
+        background-color: transparent;
+        color: #333;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+      .image-container {
+        text-align: center;
+        margin: 20px 0;
+        padding: 10px;
+        background: #fff;
+        border: 1px dashed #ccc;
+        border-radius: 8px;
+      }
+      .image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .caption {
+        font-size: 14px;
+        color: #666;
+        margin-top: 10px;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Flutter State Management နည်းပညာများ</h1>
+
+      <!-- Local State Section -->
+      <h2>၁။ Local State (setState)</h2>
+      <p>
+        Local State ဆိုသည်မှာ Widget တစ်ခုတည်းအတွင်း၌သာ သက်ရောက်မှုရှိသော State
+        ဖြစ်သည်။ <code>setState()</code> ကို အသုံးပြု၍ တည်ဆောက်ပြီး ရိုးရှင်းသော
+        အက်ပ်များအတွက် အဆင်ပြေသည်။
+      </p>
+
+      <div class="image-container">
+        <img src="../images/ss.jpg" alt="Local State Diagram" />
+        <div class="caption">
+          ပုံ ၁ - setState အသုံးပြု၍ Widget အတွင်း State ပြောင်းလဲခြင်း
+        </div>
+      </div>
+
+      <p>
+        <strong>အလုပ်လုပ်ပုံ -</strong> User က Action တစ်ခုခုလုပ်လိုက်သည်နှင့်
+        <code>setState()</code> ကိုခေါ်ကာ လက်ရှိ Widget ကို Rebuild လုပ်ပြီး UI
+        အသစ်ကို ချက်ချင်း ပြသပေးပါသည်။
+      </p>
+
+      <h3>Dart Code ဥပမာ (Local State):</h3>
+      <pre><code>
+import 'package:flutter/material.dart';
+
+class LocalStateExample extends StatefulWidget {
+  @override
+  _LocalStateExampleState createState() => _LocalStateExampleState();
+}
+
+class _LocalStateExampleState extends State&lt;LocalStateExample&gt; {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++; // State ပြောင်းလဲကြောင်း UI ကို Rebuild လုပ်ခိုင်းခြင်း
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Local State (setState)')),
+      body: Center(child: Text('Count: $_counter')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+    </code></pre>
+
+      <hr style="margin: 40px 0" />
+
+      <!-- BLoC State Section -->
+      <h2>၂။ BLoC State Technology</h2>
+      <p>
+        BLoC (Business Logic Component) သည် အက်ပ်၏ UI (Screen) နှင့် Business
+        Logic များကို သီးခြားစီ ခွဲထုတ်ထားသော Architecture ဖြစ်ပြီး ကြီးမားသော
+        Project များတွင် အများဆုံးအသုံးပြုကြသည်။
+      </p>
+
+      <div class="image-container">
+        <img src="../images/bloc.jpg" alt="BLoC Architecture Diagram" />
+        <div class="caption">
+          ပုံ ၂ - Event များပေးပို့ခြင်းနှင့် State ပြန်လည်ရယူခြင်း အဆင့်ဆင့်
+          (BLoC Architecture)
+        </div>
+      </div>
+
+      <p><strong>အလုပ်လုပ်ပုံ -</strong></p>
+      <ul>
+        <li>
+          <strong>Event:</strong> UI မှ User ၏ လုပ်ဆောင်ချက်များကို (ဥပမာ -
+          Button Click) Event များအနေဖြင့် BLoC သို့ ပို့ပေးသည်။
+        </li>
+        <li>
+          <strong>BLoC:</strong> ရလာသော Event များကို တွက်ချက်ပြီး၊ API
+          များခေါ်ခြင်း စသည်တို့ကို လုပ်ဆောင်သည်။
+        </li>
+        <li>
+          <strong>State:</strong> အားလုံးပြီးစီးသွားသောအခါ ရလဒ်များကို State
+          အသစ်များအနေဖြင့် UI ဆီသို့ ပြန်လည်ပို့ဆောင်ပေးပြီး၊ ထိုအခါမှသာ UI က
+          အသစ်ပြောင်းလဲ (Update) သွားသည်။
+        </li>
+      </ul>
+
+      <h3>Dart Code ဥပမာ (BLoC အသုံးပြုခြင်း):</h3>
+      <pre><code>
+// ၁။ Event
+abstract class CounterEvent {}
+class IncrementEvent extends CounterEvent {}
+
+// ၂။ State
+class CounterState {
+  final int count;
+  CounterState(this.count);
+}
+
+// ၃။ BLoC Logic
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class CounterBloc extends Bloc&lt;CounterEvent, CounterState&gt; {
+  CounterBloc() : super(CounterState(0)) {
+    // Event ကိုလက်ခံပြီး State ကို UI ဆီ ပြန်ပို့ပေးသည် (emit)
+    on&lt;IncrementEvent&gt;((event, emit) {
+      emit(CounterState(state.count + 1));
+    });
+  }
+}
+
+// ၄။ UI Code (BlocBuilder ကိုသုံး၍ State ပြောင်းလဲမှုများကို စောင့်ကြည့်ခြင်း)
+BlocBuilder&lt;CounterBloc, CounterState&gt;(
+  builder: (context, state) {
+    return Text('Count: ${state.count}');
+  },
+)
+// ခလုတ်နှိပ်လျှင် Event လှမ်းပို့သည့်ပုံစံ -
+// context.read&lt;CounterBloc&gt;().add(IncrementEvent());
+    </code></pre>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instructor Profile & Flutter Roadmap</title>
+    <style>
+      :root {
+        --primary-color: #0175c2;
+        --accent-color: #02569b;
+        --bg-color: #0d1117;
+        --card-bg: #161b22;
+        --border-color: #30363d;
+        --text-main: #f0f6fc;
+        --text-sub: #8b949e;
+        --code-bg: #0d1117;
+        --accent-cyan: #00d2ff;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        padding: 40px 20px;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1000px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      /* Profile Card Header */
+      .profile-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        display: flex;
+        gap: 30px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .profile-img {
+        width: 130px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 3px solid var(--primary-color);
+        box-shadow: 0 4px 15px rgba(1, 117, 194, 0.4);
+      }
+
+      .profile-info {
+        flex: 1;
+        min-width: 280px;
+      }
+
+      .profile-info h1 {
+        font-size: 2rem;
+        color: var(--text-main);
+        margin-bottom: 5px;
+      }
+
+      .profile-info .title {
+        color: var(--primary-color);
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 12px;
+      }
+
+      .profile-info p {
+        color: var(--text-sub);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      /* Certifications Tag */
+      .cert-badges {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      .cert-badge {
+        background-color: rgba(1, 117, 194, 0.15);
+        color: #58a6ff;
+        border: 1px solid rgba(88, 166, 255, 0.3);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: bold;
+      }
+
+      /* Roadmap Section */
+      .roadmap-section {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .section-title {
+        font-size: 1.5rem;
+        color: var(--text-main);
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .roadmap-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .roadmap-card {
+        background-color: #0d1117;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .roadmap-card:hover {
+        border-color: var(--primary-color);
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(1, 117, 194, 0.2);
+      }
+
+      .phase-number {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: var(--primary-color);
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+      }
+
+      .roadmap-card h3 {
+        font-size: 1.15rem;
+        color: var(--text-main);
+        margin-bottom: 10px;
+      }
+
+      .roadmap-card p {
+        color: var(--text-sub);
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+        line-height: 1.4;
+      }
+
+      .btn-link {
+        background: linear-gradient(
+          135deg,
+          var(--accent-color),
+          var(--primary-color)
+        );
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        text-align: center;
+        transition: opacity 0.2s ease;
+      }
+
+      .btn-link:hover {
+        opacity: 0.9;
+      }
+
+      /* Commands Section */
+      .commands-section {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .cmd-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 15px;
+      }
+
+      .cmd-card {
+        background-color: var(--code-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .cmd-title {
+        font-size: 0.9rem;
+        color: var(--accent-cyan);
+        font-weight: bold;
+      }
+
+      .cmd-box {
+        font-family: "Consolas", "Fira Code", "Courier New", monospace;
+        font-size: 0.88rem;
+        color: #79c0ff;
+        background-color: #161b22;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #21262d;
+        white-space: nowrap;
+        overflow-x: auto;
+      }
+
+      .cmd-desc {
+        font-size: 0.82rem;
+        color: var(--text-sub);
+        line-height: 1.4;
+      }
+
+      @media (max-width: 600px) {
+        .profile-card {
+          flex-direction: column;
+          text-align: center;
+        }
+        .cert-badges {
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Instructor Profile Card -->
+      <div class="profile-card">
+        <div class="profile-img-container">
+          <img
+            src="../images/java.png"
+            alt="Mr. Lin Thu"
+            class="profile-img"
+            onError="this.src='https://via.placeholder.com/130x150?text=Lin+Thu'"
+          />
+        </div>
+        <div class="profile-info">
+          <h1>Mr. Lin Thu</h1>
+          <div class="title">Senior Lead Instructor & Full-Stack Developer</div>
+          <p>
+            B.C.Sc (DSA)2008, MSc Russia (MATI)2013, C-DAC (India-Myanmar Center
+            for Enhancement of IT Skills) မှ
+            <strong>Professional Diploma in Java Programming (Grade A)</strong>
+            နှင့်
+            <strong>Professional Diploma in Microsoft .Net</strong>
+            ဘွဲ့လက်မှတ်များ ရရှိထားပြီး Software Architecture, AI Automation
+            workflow နှင့် Cross-Platform Mobile Development (Flutter)
+            နည်းပညာရပ်များကို စနစ်တကျ သင်ကြားပေးနေသူ ဖြစ်ပါသည်။
+          </p>
+          <div class="cert-badges">
+            <span class="cert-badge">🎓 Java Programming (Grade A)</span>
+            <span class="cert-badge">🎓 Microsoft .Net Professional</span>
+            <span class="cert-badge">📱 Flutter & Dart Expert</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Roadmap Section -->
+      <div class="roadmap-section">
+        <div class="section-title">
+          <span>🚀</span> Flutter Curriculum & CS Roadmap
+        </div>
+        <div class="roadmap-grid">
+          <!-- Phase 1 -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">
+                Road Map For Microservices Architecture
+              </div>
+              <h3>Road Map For Microservices Architecture</h3>
+              <p>Road Map For Microservices Architecture</p>
+            </div>
+            <a href="http://172.16.30.85:3000/images/arc.jpg" class="btn-link"
+              >Explore Road Map ➔</a
+            >
+          </div>
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Phase 01</div>
+              <h3>Layouts & Basic Widgets</h3>
+              <p>
+                Single-child, Multi-child Layouts (Row, Column), Scrollable
+                Lists နှင့် Form Inputs များ တည်ဆောက်နည်း။
+              </p>
+            </div>
+            <a href="/phase1" class="btn-link">Explore Phase 1 ➔</a>
+          </div>
+
+          <!-- Phase 2 -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Phase 02</div>
+              <h3>Navigation & Routing</h3>
+              <p>
+                Navigator push/pop, Passing Data, Named Routes နှင့် Modern
+                GoRouter စနစ်များ အသုံးပြုနည်း။
+              </p>
+            </div>
+            <a href="/phase2" class="btn-link">Explore Phase 2 ➔</a>
+          </div>
+
+          <!-- Phase 3 -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Phase 03</div>
+              <h3>State Management (BLoC)</h3>
+              <p>
+                Enterprise Standard BLoC / Cubit Architecture၊ Events များနှင့်
+                States များ စနစ်တကျ စီမံခန့်ခွဲနည်း။
+              </p>
+            </div>
+            <a href="/phase3" class="btn-link">Explore Phase 3 ➔</a>
+          </div>
+
+          <!-- Phase 4 -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Phase 04</div>
+              <h3>Async & API Integration</h3>
+              <p>
+                HTTP Request ခေါ်ယူခြင်း၊ JSON Data မှ Dart Model သို့
+                ပြောင်းလဲခြင်းနှင့် FutureBuilder အသုံးပြုနည်း။
+              </p>
+            </div>
+            <a href="/phase4" class="btn-link">Explore Phase 4 ➔</a>
+          </div>
+
+          <!-- Phase 5 -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Phase 05</div>
+              <h3>Local Data Storage</h3>
+              <p>
+                SharedPreferences၊ SQFlite relational DB နှင့် မြန်ဆန်သော Hive
+                NoSQL Local Storage အသုံးပြုနည်း။
+              </p>
+            </div>
+            <a href="/phase5" class="btn-link">Explore Phase 5 ➔</a>
+          </div>
+
+          <!-- Phase 6 -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Phase 06</div>
+              <h3>Native Features & Packages</h3>
+              <p>
+                Camera၊ Photo Gallery (ImagePicker)၊ GPS Location
+                တောင်းခံခြင်းနှင့် Pub.dev Packages သုံးစွဲနည်း။
+              </p>
+            </div>
+            <a href="/phase6" class="btn-link">Explore Phase 6 ➔</a>
+          </div>
+
+          <!-- API GET -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">API Integration</div>
+              <h3>API GET Request</h3>
+              <p>
+                Server ထံမှ Data များကို GET Method ဖြင့် တောင်းခံပြီး App တွင်
+                ဖော်ပြအသုံးပြုပုံ။
+              </p>
+            </div>
+            <a href="/apiget" class="btn-link">Explore API GET ➔</a>
+          </div>
+
+          <!-- API POST -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">API Integration</div>
+              <h3>API POST Request</h3>
+              <p>
+                Form Data သို့မဟုတ် JSON Payload များကို Server ထံသို့
+                ပေးပို့သိမ်းဆည်းခြင်း။
+              </p>
+            </div>
+            <a href="/apipost" class="btn-link">Explore API POST ➔</a>
+          </div>
+
+          <!-- API DELETE -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">API Integration</div>
+              <h3>API DELETE Request</h3>
+              <p>
+                Server ပေါ်မှ Data များကို ID ဖြင့် ရှာဖွေဖျက်ဆီးခြင်း (Delete)
+                လုပ်ဆောင်ပုံ။
+              </p>
+            </div>
+            <a href="/apidelete" class="btn-link">Explore API DELETE ➔</a>
+          </div>
+
+          <!-- Data Structure -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Fundamentals</div>
+              <h3>Data Structures</h3>
+              <p>
+                Array, Linked List, Stack, Queue, Tree နှင့် Graph စသည့် အခြေခံ
+                Data Structure များ။
+              </p>
+            </div>
+            <a href="/data-structure" class="btn-link">Explore DSA ➔</a>
+          </div>
+
+          <!-- SDLC -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Engineering</div>
+              <h3>Software Development Life Cycle</h3>
+              <p>
+                Agile, Kanban နှင့် Software Requirements များကို စနစ်တကျ
+                တည်ဆောက်ပုံ။
+              </p>
+            </div>
+            <a href="/sdlc" class="btn-link">Explore SDLC ➔</a>
+          </div>
+
+          <!-- Big O Notations -->
+          <div class="roadmap-card">
+            <div>
+              <div class="phase-number">Performance</div>
+              <h3>Big O Notations</h3>
+              <p>
+                Time Complexity နှင့် Space Complexity များကို
+                တွက်ချက်ခြင်းနှင့် Code Optimize လုပ်ခြင်း။
+              </p>
+            </div>
+            <a href="/big-o-notations" class="btn-link">Explore Big O ➔</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Essential Flutter Commands Section -->
+      <div class="commands-section">
+        <div class="section-title">
+          <span>⚡</span> Essential Flutter CLI Commands
+        </div>
+        <div class="cmd-grid">
+          <div class="cmd-card">
+            <div class="cmd-title">1. System & Environment Check</div>
+            <div class="cmd-box">flutter doctor</div>
+            <div class="cmd-desc">
+              Flutter SDK, Android Studio နှင့် VS Code စသည့် လိုအပ်သော Setup
+              များ စစ်ဆေးခြင်း။
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-title">2. Create New Flutter Project</div>
+            <div class="cmd-box">flutter create my_app</div>
+            <div class="cmd-desc">
+              Flutter Project အသစ်တစ်ခု စတင်ဖန်တီးခြင်း။
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-title">3. Install Packages (Pub Get)</div>
+            <div class="cmd-box">flutter pub get</div>
+            <div class="cmd-desc">
+              pubspec.yaml ထဲတွင် ရေးသားထားသော Packages များကို Download
+              ရယူခြင်း။
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-title">4. Add Package Directly</div>
+            <div class="cmd-box">flutter pub add flutter_bloc</div>
+            <div class="cmd-desc">
+              Command line မှ Package ကို တိုက်ရိုက် ထည့်သွင်းခြင်း။
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-title">5. Run Application</div>
+            <div class="cmd-box">flutter run</div>
+            <div class="cmd-desc">
+              emulator သို့မဟုတ် ဖုန်းပေါ်တွင် App ကို စတင် Run ခြင်း။
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-title">6. Build Android APK</div>
+            <div class="cmd-box">flutter build apk --release</div>
+            <div class="cmd-desc">
+              Android ဖုန်းများတွင် တိုက်ရိုက် Install လုပ်၍ရသော Release APK
+              ထုတ်ယူခြင်း။
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-title">7. Build Android App Bundle</div>
+            <div class="cmd-box">flutter build appbundle</div>
+            <div class="cmd-desc">
+              Google Play Store ပေါ်သို့ Upload တင်ရန် AAB ဖိုင် ထုတ်ယူခြင်း။
+            </div>
+          </div>
+
+          <div class="cmd-card">
+            <div class="cmd-title">8. Clean Build Cache</div>
+            <div class="cmd-box">flutter clean</div>
+            <div class="cmd-desc">
+              Error တက်နေပါက တည်ဆောက်ထားသော Cache/Build ဖိုင်များကို
+              ရှင်းထုတ်ခြင်း။
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

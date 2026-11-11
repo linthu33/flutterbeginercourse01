@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flutter Phase 5: Local Storage Tutorial</title>
+    <style>
+      :root {
+        --primary: #02569b;
+        --secondary: #0175c2;
+        --accent: #00d2ff;
+        --bg-dark: #0d1117;
+        --card-bg: #161b22;
+        --code-bg: #0d1117;
+        --text-main: #f0f6fc;
+        --text-sub: #8b949e;
+        --border: #30363d;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+      }
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        line-height: 1.6;
+        padding: 20px;
+      }
+      header {
+        text-align: center;
+        padding: 30px 20px;
+        background: linear-gradient(135deg, #02569b, #0175c2);
+        border-radius: 12px;
+        margin-bottom: 25px;
+      }
+      header h1 {
+        font-size: 2rem;
+        color: #fff;
+      }
+      header p {
+        color: #e6f0ff;
+      }
+      .nav-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        overflow-x: auto;
+      }
+      .tab-btn {
+        background-color: var(--card-bg);
+        color: var(--text-sub);
+        border: 1px solid var(--border);
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .tab-btn.active {
+        background-color: var(--secondary);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .section {
+        display: none;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 25px;
+      }
+      .section.active {
+        display: block;
+      }
+      h2 {
+        color: var(--accent);
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 8px;
+        margin-bottom: 18px;
+      }
+      .grid-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 900px) {
+        .grid-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      .code-box {
+        background-color: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #e6edf3;
+        white-space: pre;
+        overflow-x: auto;
+      }
+      .keyword {
+        color: #ff7b72;
+      }
+      .type {
+        color: #ffa657;
+      }
+      .string {
+        color: #a5d6ff;
+      }
+      .comment {
+        color: #8b949e;
+      }
+      .info-card {
+        background-color: rgba(56, 139, 253, 0.1);
+        border-left: 4px solid #388bfd;
+        padding: 12px;
+        margin-bottom: 15px;
+      }
+      .back-btn {
+        display: inline-block;
+        margin-bottom: 15px;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-btn">⬅ Back to Profile Home</a>
+
+    <header>
+      <h1>Flutter Phase 5: Local Data Storage</h1>
+      <p>
+        SharedPreferences, SQLite နှင့် Hive NoSQL စနစ်များဖြင့် Data
+        အမြဲသိမ်းဆည်းထားနည်း
+      </p>
+    </header>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="showTab('tab1')">
+        1. Shared Preferences (Key-Value)
+      </button>
+      <button class="tab-btn" onclick="showTab('tab2')">
+        2. SQFlite (Relational Database)
+      </button>
+      <button class="tab-btn" onclick="showTab('tab3')">
+        3. Hive / Isar (Fast NoSQL)
+      </button>
+      <button class="tab-btn" onclick="showTab('tab4')">
+        4. Complete Executable Code
+      </button>
+    </div>
+
+    <div id="tab1" class="section active">
+      <h2>1. Shared Preferences</h2>
+      <div class="info-card">
+        <p>
+          User Login Token၊ Dark Theme Settings စသော
+          <strong>ရိုးရှင်းသည့် Key-Value Data များ</strong> သိမ်းဆည်းရန်
+          သုံးပါသည်။
+        </p>
+      </div>
+      <div class="grid-layout">
+        <div>
+          <h3>အသုံးများသော Methods များ:</h3>
+          <ul>
+            <li>
+              <code>prefs.setString('key', 'value')</code>: String သိမ်းရန်။
+            </li>
+            <li><code>prefs.setBool('key', true)</code>: Boolean သိမ်းရန်။</li>
+            <li><code>prefs.getString('key')</code>: ပြန်လည်ထုတ်ယူရန်။</li>
+          </ul>
+        </div>
+        <div class="code-box">
+          <span class="comment">// Save Data</span>
+          <span class="keyword">final</span> prefs =
+          <span class="keyword">await</span>
+          <span class="type">SharedPreferences</span>.getInstance();
+          <span class="keyword">await</span> prefs.setString(<span
+            class="string"
+            >'user_token'</span
+          >, <span class="string">'token_123'</span>);
+
+          <span class="comment">// Read Data</span>
+          <span class="type">String</span>? token = prefs.getString(<span
+            class="string"
+            >'user_token'</span
+          >);
+        </div>
+      </div>
+    </div>
+
+    <div id="tab2" class="section">
+      <h2>2. SQFlite (SQL Database)</h2>
+      <div class="info-card">
+        <p>
+          ဇယား (Tables) များဖြင့် စနစ်တကျ ချိတ်ဆက်သိမ်းဆည်းရသော
+          <strong>Complex Local Data</strong> များအတွက် သုံးပါသည်။
+        </p>
+      </div>
+      <div class="grid-layout">
+        <div>
+          <h3>SQL Operations (CRUD):</h3>
+          <ul>
+            <li><strong>Insert:</strong> ဇယားထဲ Data သစ်ထည့်ခြင်း။</li>
+            <li><strong>Query:</strong> Data ပြန်လည်ရှာဖွေထုတ်ယူခြင်း။</li>
+          </ul>
+        </div>
+        <div class="code-box">
+          <span class="keyword">await</span> db.insert(
+          <span class="string">'todos'</span>, {<span class="string"
+            >'title'</span
+          >: <span class="string">'Buy Milk'</span>,
+          <span class="string">'completed'</span>:
+          <span class="string">0</span>}, conflictAlgorithm:
+          <span class="type">ConflictAlgorithm</span>.replace, );
+        </div>
+      </div>
+    </div>
+
+    <div id="tab3" class="section">
+      <h2>3. Hive / Isar (NoSQL)</h2>
+      <div class="info-card">
+        <p>
+          Pure Dart ဖြင့် ရေးသားထားပြီး
+          <strong>အလွန်မြန်ဆန်သော NoSQL Database</strong> ဖြစ်ပါသည်။ SQLite ထက်
+          ၅ ဆခန့် ပိုမိုမြန်ဆန်ပါသည်။
+        </p>
+      </div>
+      <div class="grid-layout">
+        <div>
+          <h3>Box Concept:</h3>
+          <ul>
+            <li>
+              Hive တွင် Database ဇယားများအစား <strong>Box</strong> များကို
+              အသုံးပြုပါသည်။
+            </li>
+          </ul>
+        </div>
+        <div class="code-box">
+          <span class="keyword">var</span> box =
+          <span class="type">Hive</span>.box(<span class="string">'myBox'</span
+          >); box.put(<span class="string">'name'</span>,
+          <span class="string">'Kyaw Kyaw'</span>); print(box.get(<span
+            class="string"
+            >'name'</span
+          >));
+        </div>
+      </div>
+    </div>
+
+    <div id="tab4" class="section">
+      <h2>4. Complete Executable Code (main.dart)</h2>
+      <p>
+        <code>pubspec.yaml</code> တွင်
+        <code>shared_preferences: ^2.2.2</code> ထည့်သွင်းပြီး အောက်ပါ Code ကို
+        Run နိုင်ပါသည် -
+      </p>
+      <div class="code-box">
+        <span class="keyword">import</span>
+        <span class="string">'package:flutter/material.dart'</span>;
+        <span class="keyword">import</span>
+        <span class="string"
+          >'package:shared_preferences/shared_preferences.dart'</span
+        >;
+
+        <span class="keyword">void</span> main() =>
+        <span class="function">runApp</span>(<span class="keyword">const</span>
+        <span class="type">StorageApp</span>());
+
+        <span class="keyword">class</span> <span class="type">StorageApp</span>
+        <span class="keyword">extends</span>
+        <span class="type">StatefulWidget</span> {
+        <span class="keyword">const</span>
+        <span class="type">StorageApp</span>({<span class="type">super</span
+        >.key});
+        <span class="type">@override</span>
+        <span class="type">State</span>&lt;<span class="type">StorageApp</span
+        >&gt; <span class="function">createState</span>() =>
+        <span class="type">_StorageAppState</span>(); }
+
+        <span class="keyword">class</span>
+        <span class="type">_StorageAppState</span>
+        <span class="keyword">extends</span>
+        <span class="type">State</span>&lt;<span class="type">StorageApp</span
+        >&gt; { <span class="type">String</span> _name =
+        <span class="string">'No Name Saved'</span>;
+
+        <span class="type">@override</span>
+        <span class="type">Widget</span>
+        <span class="function">build</span>(<span class="type"
+          >BuildContext</span
+        >
+        context) { <span class="keyword">return</span>
+        <span class="type">MaterialApp</span>( home:
+        <span class="type">Scaffold</span>( appBar:
+        <span class="type">AppBar</span>(title:
+        <span class="keyword">const</span> <span class="type">Text</span>(<span
+          class="string"
+          >'Phase 5: Local Storage Demo'</span
+        >)), body: <span class="type">Center</span>( child:
+        <span class="type">Column</span>( mainAxisAlignment:
+        <span class="type">MainAxisAlignment</span>.center, children: [
+        <span class="type">Text</span>(_name, style:
+        <span class="keyword">const</span>
+        <span class="type">TextStyle</span>(fontSize:
+        <span class="string">20</span>)),
+        <span class="type">ElevatedButton</span>( onPressed: _saveName, child:
+        <span class="keyword">const</span> <span class="type">Text</span>(<span
+          class="string"
+          >'Save "Kyaw Min Thu"'</span
+        >), ), ], ), ), ), ); }
+
+        <span class="keyword">void</span> _saveName()
+        <span class="keyword">async</span> {
+        <span class="keyword">final</span> prefs =
+        <span class="keyword">await</span>
+        <span class="type">SharedPreferences</span>.getInstance();
+        <span class="keyword">await</span> prefs.setString(<span class="string"
+          >'username'</span
+        >, <span class="string">'Kyaw Min Thu'</span>);
+        <span class="function">setState</span>(() { _name =
+        prefs.getString(<span class="string">'username'</span>) ??
+        <span class="string">''</span>; }); } }
+      </div>
+    </div>
+
+    <script>
+      function showTab(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        event.currentTarget.classList.add("active");
+      }
+    </script>
+  </body>
+</html>

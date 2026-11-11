@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flutter Phase 4: Async & API Integration Tutorial</title>
+  <style>
+    :root {
+      --primary: #02569B;
+      --secondary: #0175C2;
+      --accent: #00D2FF;
+      --bg-dark: #0d1117;
+      --card-bg: #161b22;
+      --code-bg: #0d1117;
+      --text-main: #f0f6fc;
+      --text-sub: #8b949e;
+      --border: #30363d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; padding: 20px; }
+
+    header {
+      text-align: center; padding: 30px 20px;
+      background: linear-gradient(135deg, #02569B, #0175C2);
+      border-radius: 12px; margin-bottom: 25px;
+    }
+    header h1 { font-size: 2rem; color: #fff; }
+    header p { color: #e6f0ff; font-size: 1rem; }
+
+    .nav-tabs { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+    .tab-btn {
+      background-color: var(--card-bg); color: var(--text-sub); border: 1px solid var(--border);
+      padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; white-space: nowrap;
+    }
+    .tab-btn.active { background-color: var(--secondary); color: #fff; border-color: var(--accent); }
+
+    .section { display: none; background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 25px; }
+    .section.active { display: block; }
+
+    h2 { color: var(--accent); border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-bottom: 18px; }
+    .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .grid-layout { grid-template-columns: 1fr; } }
+
+    .code-box {
+      background-color: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px; font-family: 'Consolas', monospace; font-size: 0.85rem; color: #e6edf3;
+      white-space: pre; overflow-x: auto;
+    }
+    .keyword { color: #ff7b72; } .type { color: #ffa657; } .string { color: #a5d6ff; } .comment { color: #8b949e; }
+    .info-card { background-color: rgba(56, 139, 253, 0.1); border-left: 4px solid #388bfd; padding: 12px; margin-bottom: 15px; }
+    .back-btn { display: inline-block; margin-bottom: 15px; color: var(--accent); text-decoration: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="back-btn">⬅ Back to Profile Home</a>
+
+  <header>
+    <h1>Flutter Phase 4: Asynchronous & API Integration</h1>
+    <p>Backend Server ထံမှ HTTP API Data များ တောင်းဆိုခြင်းနှင့် Model ပြောင်းလဲနည်းများ</p>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('tab1')">1. Async/Await & Future</button>
+    <button class="tab-btn" onclick="showTab('tab2')">2. HTTP Request & JSON Parsing</button>
+    <button class="tab-btn" onclick="showTab('tab3')">3. FutureBuilder Widget</button>
+    <button class="tab-btn" onclick="showTab('tab4')">4. Complete Executable Code</button>
+  </div>
+
+  <div id="tab1" class="section active">
+    <h2>1. Async, Await & Future</h2>
+    <div class="info-card"><p>Network API ခေါ်ယူခြင်းနှင့် Disk ရေးဖတ်ခြင်းများသည် အချိန်ယူရသဖြင့် App မရပ်သွားစေရန် <strong>Asynchronous Programming (`Future`, `async/await`)</strong> ကို သုံးရပါသည်။</p></div>
+    <div class="grid-layout">
+      <div>
+        <h3>အဓိက သဘောတရားများ:</h3>
+        <ul>
+          <li><strong>Future:</strong> အနာဂတ်တွင် ထွက်ပေါ်လာမည့် Data တန်ဖိုး။</li>
+          <li><strong>async/await:</strong> API Data ရောက်ရှိလာသည်အထိ ခေတ္တစောင့်ဆိုင်းပြီးမှ နောက်တစ်ကြောင်းသို့ ဆက်သွားရန် သတ်မှတ်ခြင်း။</li>
+        </ul>
+      </div>
+      <div class="code-box"><span class="type">Future</span>&lt;<span class="type">String</span>&gt; <span class="function">fetchData</span>() <span class="keyword">async</span> {
+  <span class="comment">// 2 စက္ကန့် စောင့်ဆိုင်းခြင်း</span>
+  <span class="keyword">await</span> <span class="type">Future</span>.delayed(<span class="keyword">const</span> <span class="type">Duration</span>(seconds: <span class="string">2</span>));
+  <span class="keyword">return</span> <span class="string">'Data Loaded Successfully'</span>;
+}</div>
+    </div>
+  </div>
+
+  <div id="tab2" class="section">
+    <h2>2. HTTP Request & JSON Model Parsing</h2>
+    <div class="info-card"><p><code>http</code> package ကို သုံး၍ API ခေါ်ယူပြီး JSON Response ကို Dart Class Object သို့ ပြောင်းလဲအသုံးပြုခြင်း။</p></div>
+    <div class="grid-layout">
+      <div>
+        <h3>လုပ်ဆောင်ချက် အဆင့်များ:</h3>
+        <ul>
+          <li><strong>Model Class:</strong> JSON Key များကို Dart Property များအဖြစ် စီမံခြင်း။</li>
+          <li><strong>fromJson:</span> Factory Constructor ဖြင့် JSON Map မှ Object သို့ ပြောင်းခြင်း။</li>
+        </ul>
+      </div>
+      <div class="code-box"><span class="keyword">class</span> <span class="type">Post</span> {
+  <span class="keyword">final</span> <span class="type">int</span> id;
+  <span class="keyword">final</span> <span class="type">String</span> title;
+
+  <span class="type">Post</span>({<span class="keyword">required</span> <span class="keyword">this</span>.id, <span class="keyword">required</span> <span class="keyword">this</span>.title});
+
+  <span class="keyword">factory</span> <span class="type">Post</span>.fromJson(<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">dynamic</span>&gt; json) {
+    <span class="keyword">return</span> <span class="type">Post</span>(
+      id: json[<span class="string">'id'</span>],
+      title: json[<span class="string">'title'</span>],
+    );
+  }
+}</div>
+    </div>
+  </div>
+
+  <div id="tab3" class="section">
+    <h2>3. FutureBuilder Widget</h2>
+    <div class="info-card"><p>API Data တောင်းနေချိန်တွင် <strong>Loading UI</strong>၊ Data ရလာပါက <strong>Content UI</strong>၊ Error တက်ပါက <strong>Error UI</strong> များကို အလိုအလျောက် စီမံပေးသည့် Widget ဖြစ်ပါသည်။</p></div>
+    <div class="grid-layout">
+      <div>
+        <h3>Snapshot States:</h3>
+        <ul>
+          <li><code>snapshot.connectionState == ConnectionState.waiting</code>: Loading ပြရန်။</li>
+          <li><code>snapshot.hasError</code>: Error တက်ကြောင်း ပြရန်။</li>
+          <li><code>snapshot.hasData</code>: Data ရလာပါက UI တွင် ဖော်ပြရန်။</li>
+        </ul>
+      </div>
+      <div class="code-box"><span class="type">FutureBuilder</span>&lt;<span class="type">Post</span>&gt;(
+  future: fetchPost(),
+  builder: (context, snapshot) {
+    <span class="keyword">if</span> (snapshot.connectionState == <span class="type">ConnectionState</span>.waiting) {
+      <span class="keyword">return</span> <span class="keyword">const</span> <span class="type">CircularProgressIndicator</span>();
+    } <span class="keyword">else</span> <span class="keyword">if</span> (snapshot.hasError) {
+      <span class="keyword">return</span> <span class="type">Text</span>(<span class="string">'Error: ${snapshot.error}'</span>);
+    }
+    <span class="keyword">return</span> <span class="type">Text</span>(snapshot.data!.title);
+  },
+)</div>
+    </div>
+  </div>
+
+  <div id="tab4" class="section">
+    <h2>4. Complete Executable Code (main.dart)</h2>
+    <p><code>pubspec.yaml</code> တွင် <code>http: ^1.2.0</code> ထည့်သွင်းပြီး အောက်ပါ Code ကို Run နိုင်ပါသည် -</p>
+    <div class="code-box"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+<span class="keyword">import</span> <span class="string">'package:http/http.dart'</span> <span class="keyword">as</span> http;
+<span class="keyword">import</span> <span class="string">'dart:convert'</span>;
+
+<span class="keyword">void</span> main() => <span class="function">runApp</span>(<span class="keyword">const</span> <span class="type">ApiApp</span>());
+
+<span class="keyword">class</span> <span class="type">ApiApp</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">ApiApp</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">MaterialApp</span>(
+      home: <span class="type">Scaffold</span>(
+        appBar: <span class="type">AppBar</span>(title: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Phase 4: API Demo'</span>)),
+        body: <span class="type">Center</span>(
+          child: <span class="type">FutureBuilder</span>&lt;<span class="type">String</span>&gt;(
+            future: fetchTitle(),
+            builder: (context, snapshot) {
+              <span class="keyword">if</span> (snapshot.connectionState == <span class="type">ConnectionState</span>.waiting) {
+                <span class="keyword">return</span> <span class="keyword">const</span> <span class="type">CircularProgressIndicator</span>();
+              }
+              <span class="keyword">return</span> <span class="type">Text</span>(snapshot.data ?? <span class="string">'No Data'</span>, style: <span class="keyword">const</span> <span class="type">TextStyle</span>(fontSize: <span class="string">18</span>));
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  <span class="type">Future</span>&lt;<span class="type">String</span>&gt; fetchTitle() <span class="keyword">async</span> {
+    <span class="keyword">final</span> response = <span class="keyword">await</span> http.get(<span class="type">Uri</span>.parse(<span class="string">'https://jsonplaceholder.typicode.com/todos/1'</span>));
+    <span class="keyword">if</span> (response.statusCode == <span class="string">200</span>) {
+      <span class="keyword">return</span> jsonDecode(response.body)[<span class="string">'title'</span>];
+    }
+    <span class="keyword">return</span> <span class="string">'Error Loading Data'</span>;
+  }
+}</div>
+  </div>
+
+  <script>
+    function showTab(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flutter Phase 1: Layout Core & Basic Widgets Tutorial</title>
+  <style>
+    :root {
+      --primary: #02569B;
+      --secondary: #0175C2;
+      --accent: #00D2FF;
+      --bg-dark: #0d1117;
+      --card-bg: #161b22;
+      --code-bg: #0d1117;
+      --text-main: #f0f6fc;
+      --text-sub: #8b949e;
+      --border: #30363d;
+      --highlight: #238636;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: linear-gradient(135deg, #02569B, #0175C2);
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    header p {
+      color: #e6f0ff;
+      font-size: 1.1rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .tab-btn {
+      background-color: var(--card-bg);
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background-color: var(--secondary);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .section {
+      display: none;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h2 {
+      color: var(--accent);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      color: #58a6ff;
+      margin: 15px 0 8px 0;
+      font-size: 1.1rem;
+    }
+
+    p, ul {
+      margin-bottom: 15px;
+      color: #c9d1d9;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-box {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Consolas', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #e6edf3;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.45;
+    }
+
+    .keyword { color: #ff7b72; }
+    .type { color: #ffa657; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; }
+    .function { color: #d2a8ff; }
+
+    .badge {
+      display: inline-block;
+      background-color: #238636;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .info-card {
+      background-color: rgba(56, 139, 253, 0.1);
+      border-left: 4px solid #388bfd;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-sub);
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Flutter Phase 1: Layout Core & Basic Widgets</h1>
+    <p>အခြေခံ Widget များ၊ Layouts Structure နှင့် Code များကို လက်တွေ့လေ့လာရန် Tutorial</p>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('tab1')">1. Single-child Layouts</button>
+    <button class="tab-btn" onclick="showTab('tab2')">2. Multi-child (Row & Column)</button>
+    <button class="tab-btn" onclick="showTab('tab3')">3. Stack & Positioned</button>
+    <button class="tab-btn" onclick="showTab('tab4')">4. Scrollable Widgets</button>
+    <button class="tab-btn" onclick="showTab('tab5')">5. Form Inputs</button>
+    <button class="tab-btn" onclick="showTab('tab6')">6. Complete App Code</button>
+  </div>
+
+  <!-- TAB 1: Single-child Layouts -->
+  <div id="tab1" class="section active">
+    <h2>1. Single-child Layout Widgets</h2>
+    <div class="info-card">
+      <p><strong>Single-child Widgets</strong> ဆိုသည်မှာ ကလေး (Child Widget) <strong>တစ်လုံးတည်း</strong> သာ လက်ခံနိုင်သော Widget များဖြစ်ကြပြီး Size၊ Padding၊ Alignment စသည်တို့ကို စီမံပေးပါသည်။</p>
+    </div>
+    
+    <div class="grid-layout">
+      <div>
+        <h3>အဓိက ပါဝင်သော Widgets များ:</h3>
+        <ul>
+          <li><strong>Container:</strong> Margin, Padding, Border, Background Color နှင့် Width/Height သတ်မှတ်ရန်။</li>
+          <li><strong>Padding:</strong> Child Widget ကို ဘေးပတ်ပတ်လည်မှ ခြားပေးရန် (EdgeInsets)။</li>
+          <li><strong>Center:</strong> Child Widget ကို Screen/Parent ၏ အလယ်တည့်တည့်သို့ ပို့ပေးရန်။</li>
+          <li><strong>SizedBox:</strong> အကွာအဝေး (Gap) ခြားရန် သို့မဟုတ် Width/Height အသေ သတ်မှတ်ရန်။</li>
+          <li><strong>Expanded / Flexible:</strong> Row သို့မဟုတ် Column ထဲတွင် နေရာအပြည့် ယူခိုင်းရန်။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// Single-child Widgets Example</span>
+<span class="type">Container</span>(
+  margin: <span class="type">EdgeInsets</span>.all(<span class="string">16.0</span>),
+  padding: <span class="type">EdgeInsets</span>.symmetric(horizontal: <span class="string">20</span>, vertical: <span class="string">10</span>),
+  decoration: <span class="type">BoxDecoration</span>(
+    color: <span class="type">Colors</span>.blueAccent,
+    borderRadius: <span class="type">BorderRadius</span>.circular(<span class="string">8</span>),
+  ),
+  child: <span class="type">Center</span>(
+    child: <span class="type">Text</span>(
+      <span class="string">'Container inside Center'</span>,
+      style: <span class="type">TextStyle</span>(color: <span class="type">Colors</span>.white),
+    ),
+  ),
+)</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Multi-child Layouts -->
+  <div id="tab2" class="section">
+    <h2>2. Multi-child Layout Widgets (Row & Column)</h2>
+    <div class="info-card">
+      <p>Widget များကို <strong>ဒေါင်လိုက် (Vertical)</strong> သို့မဟုတ် <strong>အလျားလိုက် (Horizontal)</strong> စီတန်းလိုသည့်အခါ <code>children: []</code> (List) ကို အသုံးပြုပါသည်။</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>Row & Column ၏ Alignment များ:</h3>
+        <ul>
+          <li><strong>Row:</strong> အလျားလိုက် စီပေးသည်။ (MainAxis = ဘယ်/ညာ, CrossAxis = အပေါ်/အောက်)</li>
+          <li><strong>Column:</strong> ဒေါင်လိုက် စီပေးသည်။ (MainAxis = အပေါ်/အောက်, CrossAxis = ဘယ်/ညာ)</li>
+          <li><strong>MainAxisAlignment:</strong> start, center, end, spaceBetween, spaceAround</li>
+          <li><strong>CrossAxisAlignment:</strong> start, center, end, stretch</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// Row & Column Example</span>
+<span class="type">Column</span>(
+  mainAxisAlignment: <span class="type">MainAxisAlignment</span>.center,
+  crossAxisAlignment: <span class="type">CrossAxisAlignment</span>.center,
+  children: [
+    <span class="type">Text</span>(<span class="string">'Title Text'</span>),
+    <span class="type">SizedBox</span>(height: <span class="string">10</span>), <span class="comment">// Space Gap</span>
+    <span class="type">Row</span>(
+      mainAxisAlignment: <span class="type">MainAxisAlignment</span>.spaceAround,
+      children: [
+        <span class="type">Icon</span>(<span class="type">Icons</span>.star),
+        <span class="type">Text</span>(<span class="string">'4.5 Rating'</span>),
+      ],
+    ),
+  ],
+)</div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Stack & Positioned -->
+  <div id="tab3" class="section">
+    <h2>3. Stack & Positioned Widgets</h2>
+    <div class="info-card">
+      <p>Widget များကို တစ်ခုပေါ်တစ်ခု <strong>ထပ်လျက် (Overlay)</strong> နေရာချလိုသည့်အခါ <code>Stack</code> ကို သုံးပါသည်။ နေရာအတိအကျ သတ်မှတ်ရန် <code>Positioned</code> ကို သုံးပါသည်။</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>အသုံးဝင်ပုံများ:</h3>
+        <ul>
+          <li>ဓာတ်ပုံပေါ်တွင် စာသား သို့မဟုတ် Icon ထပ်တင်လိုသည့်အခါ (ဥပမာ - Profile Card)။</li>
+          <li>Notification Badge လေးများကို Icon ၏ ထောင့်တွင် ကပ်တင်ချင်သည့်အခါ။</li>
+          <li><code>Positioned</code> ၏ top, bottom, left, right များကို သုံး၍ နေရာချခြင်း။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// Stack & Positioned Example</span>
+<span class="type">Stack</span>(
+  children: [
+    <span class="type">Container</span>(
+      width: <span class="string">100</span>,
+      height: <span class="string">100</span>,
+      color: <span class="type">Colors</span>.grey,
+    ),
+    <span class="type">Positioned</span>(
+      top: <span class="string">5</span>,
+      right: <span class="string">5</span>,
+      child: <span class="type">Container</span>(
+        padding: <span class="type">EdgeInsets</span>.all(<span class="string">4</span>),
+        color: <span class="type">Colors</span>.red,
+        child: <span class="type">Text</span>(<span class="string">'NEW'</span>, style: <span class="type">TextStyle</span>(fontSize: <span class="string">10</span>)),
+      ),
+    ),
+  ],
+)</div>
+    </div>
+  </div>
+
+  <!-- TAB 4: Scrollable Widgets -->
+  <div id="tab4" class="section">
+    <h2>4. Scrollable Widgets (ListView & GridView)</h2>
+    <div class="info-card">
+      <p>Screen ထက် ကျော်လွန်သော Data များ သို့မဟုတ် List များကို Performance မထိခိုက်ဘဲ <strong>Scroll ဆွဲ၍ ကြည့်ရှုနိုင်ရန်</strong> အသုံးပြုပါသည်။</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>ListView vs ListView.builder:</h3>
+        <ul>
+          <li><strong>ListView:</strong> Item နည်းနည်းကို ရိုးရိုးတန်းစီပြရန်။</li>
+          <li><strong>ListView.builder:</strong> API သို့မဟုတ် Array မှလာသော Data အများကြီး (1000+) ကို Screen ပေါ်ရောက်မှ Render လုပ်ပေးသောကြောင့် Memory သက်သာစေသည်။</li>
+          <li><strong>GridView.builder:</strong> 2 Columns / 3 Columns ပုံစံ ကွက်စိပ်ပြရန်။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// ListView.builder Example</span>
+<span class="type">ListView</span>.builder(
+  itemCount: <span class="string">20</span>,
+  itemBuilder: (context, index) {
+    <span class="keyword">return</span> <span class="type">Card</span>(
+      child: <span class="type">ListTile</span>(
+        leading: <span class="type">Icon</span>(<span class="type">Icons</span>.person),
+        title: <span class="type">Text</span>(<span class="string">'User Item $index'</span>),
+        subtitle: <span class="type">Text</span>(<span class="string">'Subtitle information'</span>),
+        trailing: <span class="type">Icon</span>(<span class="type">Icons</span>.arrow_forward_ios),
+      ),
+    );
+  },
+)</div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Basic Form Inputs -->
+  <div id="tab5" class="section">
+    <h2>5. Basic Form Inputs & Buttons</h2>
+    <div class="info-card">
+      <p>User ဆီမှ Input တောင်းခံခြင်းနှင့် Click နှိပ်သည့် Action များကို တုံ့ပြန်ရန် အသုံးပြုပါသည်။</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>အဓိက ပါဝင်သော Inputs များ:</h3>
+        <ul>
+          <li><strong>TextField:</strong> စာသားများ ရိုက်ထည့်ရန် (Hint, Border Decoration)။</li>
+          <li><strong>ElevatedButton:</strong> အရိပ်ပါသော ပင်မ Button။</li>
+          <li><strong>TextButton / IconButton:</strong> စာသား သို့မဟုတ် Icon သီးသန့် Button။</li>
+          <li><strong>Checkbox & Switch:</strong> On/Off သို့မဟုတ် Check လုပ်ရန်။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// TextField & Button Example</span>
+<span class="type">TextField</span>(
+  decoration: <span class="type">InputDecoration</span>(
+    labelText: <span class="string">'Email Address'</span>,
+    border: <span class="type">OutlineInputBorder</span>(),
+    prefixIcon: <span class="type">Icon</span>(<span class="type">Icons</span>.email),
+  ),
+),
+<span class="type">SizedBox</span>(height: <span class="string">15</span>),
+<span class="type">ElevatedButton</span>(
+  onPressed: () {
+    <span class="comment">// Button click logic</span>
+  },
+  child: <span class="type">Text</span>(<span class="string">'Submit'</span>),
+)</div>
+    </div>
+  </div>
+
+  <!-- TAB 6: Complete Tutorial Code -->
+  <div id="tab6" class="section">
+    <h2>6. Complete Tutorial Code (Run နိုင်သော Code အပြည့်အစုံ) <span class="badge">main.dart</span></h2>
+    <p>အောက်ပါ Code ကို ကူးယူပြီး သင်၏ Flutter project ထဲရှိ <code>lib/main.dart</code> ထဲတွင် အစားထိုး၍ <code>flutter run</code> ဖြင့် စမ်းသပ်နိုင်ပါသည်။</p>
+
+    <div class="code-box"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+
+<span class="keyword">void</span> <span class="function">main</span>() {
+  <span class="function">runApp</span>(<span class="keyword">const</span> <span class="type">MyApp</span>());
+}
+
+<span class="keyword">class</span> <span class="type">MyApp</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">MyApp</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">MaterialApp</span>(
+      debugShowCheckedModeBanner: <span class="keyword">false</span>,
+      title: <span class="string">'Phase 1 Layout Tutorial'</span>,
+      theme: <span class="type">ThemeData</span>(primarySwatch: <span class="type">Colors</span>.blue),
+      home: <span class="keyword">const</span> <span class="type">HomeScreen</span>(),
+    );
+  }
+}
+
+<span class="keyword">class</span> <span class="type">HomeScreen</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">HomeScreen</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">Scaffold</span>(
+      appBar: <span class="type">AppBar</span>(
+        title: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Phase 1: Layout & Widgets'</span>),
+        centerTitle: <span class="keyword">true</span>,
+      ),
+      body: <span class="type">SingleChildScrollView</span>(
+        padding: <span class="keyword">const</span> <span class="type">EdgeInsets</span>.all(<span class="string">16.0</span>),
+        child: <span class="type">Column</span>(
+          crossAxisAlignment: <span class="type">CrossAxisAlignment</span>.start,
+          children: [
+            <span class="comment">// 1. Single-child & Container</span>
+            <span class="type">Container</span>(
+              padding: <span class="keyword">const</span> <span class="type">EdgeInsets</span>.all(<span class="string">16.0</span>),
+              decoration: <span class="type">BoxDecoration</span>(
+                color: <span class="type">Colors</span>.blue.shade100,
+                borderRadius: <span class="type">BorderRadius</span>.circular(<span class="string">12</span>),
+              ),
+              child: <span class="keyword">const</span> <span class="type">Row</span>(
+                children: [
+                  <span class="type">Icon</span>(<span class="type">Icons</span>.info, color: <span class="type">Colors</span>.blue),
+                  <span class="type">SizedBox</span>(width: <span class="string">12</span>),
+                  <span class="type">Expanded</span>(
+                    child: <span class="type">Text</span>(
+                      <span class="string">'Welcome to Flutter Phase 1 Tutorial!'</span>,
+                      style: <span class="type">TextStyle</span>(fontWeight: <span class="type">FontWeight</span>.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">20</span>),
+
+            <span class="comment">// 2. Stack & Positioned Example</span>
+            <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'1. Stack & Positioned:'</span>, style: <span class="type">TextStyle</span>(fontSize: <span class="string">16</span>, fontWeight: <span class="type">FontWeight</span>.bold)),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">10</span>),
+            <span class="type">Stack</span>(
+              children: [
+                <span class="type">Container</span>(
+                  height: <span class="string">120</span>,
+                  width: double.infinity,
+                  decoration: <span class="type">BoxDecoration</span>(
+                    color: <span class="type">Colors</span>.grey.shade300,
+                    borderRadius: <span class="type">BorderRadius</span>.circular(<span class="string">10</span>),
+                  ),
+                  child: <span class="keyword">const</span> <span class="type">Center</span>(child: <span class="type">Text</span>(<span class="string">'Background Container'</span>)),
+                ),
+                <span class="type">Positioned</span>(
+                  top: <span class="string">10</span>,
+                  right: <span class="string">10</span>,
+                  child: <span class="type">Chip</span>(
+                    label: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Featured'</span>, style: <span class="type">TextStyle</span>(color: <span class="type">Colors</span>.white)),
+                    backgroundColor: <span class="type">Colors</span>.orange,
+                  ),
+                ),
+              ],
+            ),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">20</span>),
+
+            <span class="comment">// 3. Form Input Example</span>
+            <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'2. Basic Inputs:'</span>, style: <span class="type">TextStyle</span>(fontSize: <span class="string">16</span>, fontWeight: <span class="type">FontWeight</span>.bold)),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">10</span>),
+            <span class="type">TextField</span>(
+              decoration: <span class="type">InputDecoration</span>(
+                labelText: <span class="string">'Enter Item Name'</span>,
+                border: <span class="type">OutlineInputBorder</span>(borderRadius: <span class="type">BorderRadius</span>.circular(<span class="string">8</span>)),
+                prefixIcon: <span class="keyword">const</span> <span class="type">Icon</span>(<span class="type">Icons</span>.edit),
+              ),
+            ),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">10</span>),
+            <span class="type">SizedBox</span>(
+              width: double.infinity,
+              child: <span class="type">ElevatedButton</span>(
+                onPressed: () {},
+                child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Add Item'</span>),
+              ),
+            ),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">20</span>),
+
+            <span class="comment">// 4. ListView (Scrollable)</span>
+            <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'3. ListView Items:'</span>, style: <span class="type">TextStyle</span>(fontSize: <span class="string">16</span>, fontWeight: <span class="type">FontWeight</span>.bold)),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">10</span>),
+            <span class="type">ListView</span>.builder(
+              shrinkWrap: <span class="keyword">true</span>, <span class="comment">// Column ထဲတွင် သုံးရန်</span>
+              physics: <span class="keyword">const</span> <span class="type">NeverScrollableScrollPhysics</span>(),
+              itemCount: <span class="string">3</span>,
+              itemBuilder: (context, index) {
+                <span class="keyword">return</span> <span class="type">Card</span>(
+                  margin: <span class="keyword">const</span> <span class="type">EdgeInsets</span>.only(bottom: <span class="string">8</span>),
+                  child: <span class="type">ListTile</span>(
+                    leading: <span class="type">CircleAvatar</span>(child: <span class="type">Text</span>(<span class="string">'${index + 1}'</span>)),
+                    title: <span class="type">Text</span>(<span class="string">'List Item ${index + 1}'</span>),
+                    subtitle: <span class="type">Text</span>(<span class="string">'Description for item ${index + 1}'</span>),
+                    trailing: <span class="keyword">const</span> <span class="type">Icon</span>(<span class="type">Icons</span>.arrow_forward),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}</div>
+  </div>
+
+  <footer>
+    <p>Flutter Curriculum - Phase 1 Tutorial © 2026</p>
+  </footer>
+
+  <script>
+    function showTab(tabId) {
+      // Hide all sections
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(sec => sec.classList.remove('active'));
+
+      // Remove active class from buttons
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Show selected tab
+      document.getElementById(tabId).classList.add('active');
+
+      // Highlight active button
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>

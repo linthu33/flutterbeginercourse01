@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flutter Phase 2: Navigation & Routing Tutorial</title>
+  <style>
+    :root {
+      --primary: #02569B;
+      --secondary: #0175C2;
+      --accent: #00D2FF;
+      --bg-dark: #0d1117;
+      --card-bg: #161b22;
+      --code-bg: #0d1117;
+      --text-main: #f0f6fc;
+      --text-sub: #8b949e;
+      --border: #30363d;
+      --highlight: #238636;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: linear-gradient(135deg, #02569B, #0175C2);
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    header p {
+      color: #e6f0ff;
+      font-size: 1.1rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .tab-btn {
+      background-color: var(--card-bg);
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background-color: var(--secondary);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .section {
+      display: none;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h2 {
+      color: var(--accent);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      color: #58a6ff;
+      margin: 15px 0 8px 0;
+      font-size: 1.1rem;
+    }
+
+    p, ul {
+      margin-bottom: 15px;
+      color: #c9d1d9;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-box {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Consolas', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #e6edf3;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.45;
+    }
+
+    .keyword { color: #ff7b72; }
+    .type { color: #ffa657; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; }
+    .function { color: #d2a8ff; }
+
+    .badge {
+      display: inline-block;
+      background-color: #238636;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .info-card {
+      background-color: rgba(56, 139, 253, 0.1);
+      border-left: 4px solid #388bfd;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-sub);
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Flutter Phase 2: Navigation & Routing</h1>
+    <p>Page များ အပြန်အလှန် ရွှေ့ပြောင်းခြင်း၊ Data ပေးပို့ခြင်းနှင့် Routing စနစ်များ လေ့လာရန်</p>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('tab1')">1. Basic Navigator (Push/Pop)</button>
+    <button class="tab-btn" onclick="showTab('tab2')">2. Passing Data Between Screens</button>
+    <button class="tab-btn" onclick="showTab('tab3')">3. Named Routes</button>
+    <button class="tab-btn" onclick="showTab('tab4')">4. GoRouter Concept</button>
+    <button class="tab-btn" onclick="showTab('tab5')">5. Complete Executable Code</button>
+  </div>
+
+  <!-- TAB 1: Basic Navigator -->
+  <div id="tab1" class="section active">
+    <h2>1. Basic Navigator (Push & Pop)</h2>
+    <div class="info-card">
+      <p>Flutter တွင် Screen များကို **Stack (ထပ်လျက်ပုံစံ)** ဖြင့် စီမံပါသည်။ Page အသစ်သို့ သွားလိုပါက <code>Navigator.push()</code> ကို သုံးပြီး၊ မူလ Page သို့ ပြန်ထွက်လိုပါက <code>Navigator.pop()</code> ကို အသုံးပြုပါသည်။</p>
+    </div>
+    
+    <div class="grid-layout">
+      <div>
+        <h3>အဓိက ပါဝင်သော မက္ကနိဇမ်များ:</h3>
+        <ul>
+          <li><strong>Navigator.push():</strong> Screen အသစ်တစ်ခုကို Stack ၏ အပေါ်ဆုံးသို့ တင်လိုက်ခြင်း (Page သစ်သို့ ရောက်ရှိသွားမည်)။</li>
+          <li><strong>MaterialPageRoute:</strong> Android/iOS ပုံစံ Slide/Fade Transition Animation များဖြင့် Page အသစ်ဖွင့်ပေးခြင်း။</li>
+          <li><strong>Navigator.pop():</strong> လက်ရှိ Screen ကို ဖျက်ထုတ်လိုက်ပြီး အောက်တွင် ကျန်ရှိသော မူလ Screen သို့ ပြန်ရောက်သွားခြင်း (Back Button)။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// 1. Page အသစ်သို့ သွားခြင်း</span>
+<span class="type">ElevatedButton</span>(
+  onPressed: () {
+    <span class="type">Navigator</span>.push(
+      context,
+      <span class="type">MaterialPageRoute</span>(
+        builder: (context) => <span class="keyword">const</span> <span class="type">SecondScreen</span>(),
+      ),
+    );
+  },
+  child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Go to Second Screen'</span>),
+)
+
+<span class="comment">// 2. မူလ Page သို့ ပြန်ထွက်ခြင်း</span>
+<span class="type">ElevatedButton</span>(
+  onPressed: () {
+    <span class="type">Navigator</span>.pop(context);
+  },
+  child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Back to First Screen'</span>),
+)</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Passing Data -->
+  <div id="tab2" class="section">
+    <h2>2. Passing Data Between Screens</h2>
+    <div class="info-card">
+      <p>Page တစ်ခုမှ အခြား Page တစ်ခုသို့ Data (ဥပမာ - Username, Product ID, Object) များကို **Constructor သို့မဟုတ် Return Value** မှတစ်ဆင့် ပေးပို့/လက်ခံနိုင်ပါသည်။</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>Data ပေးပို့နည်း (၂) မျိုး:</h3>
+        <ul>
+          <li><strong>Forward Passing:</strong> Screen A မှ Screen B သို့ Constructor ဖြင့် Data ပါးလိုက်ခြင်း။</li>
+          <li><strong>Backward Passing (Return Result):</strong> Screen B တွင် အလုပ်လုပ်ပြီး ရရှိလာသော အဖြေ/Data ကို <code>Navigator.pop(context, result)</code> ဖြင့် Screen A သို့ ပြန်လည်ပေးပို့ခြင်း။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// Screen A မှ Data ပါး၍ ဖုန်းခေါ်ခြင်း</span>
+<span class="type">Navigator</span>.push(
+  context,
+  <span class="type">MaterialPageRoute</span>(
+    builder: (context) => <span class="type">DetailScreen</span>(
+      userName: <span class="string">'Aung Aung'</span>,
+      age: <span class="string">25</span>,
+    ),
+  ),
+);
+
+<span class="comment">// Screen B (DetailScreen) တွင် လက်ခံယူခြင်း</span>
+<span class="keyword">class</span> <span class="type">DetailScreen</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">final</span> <span class="type">String</span> userName;
+  <span class="keyword">final</span> <span class="type">int</span> age;
+
+  <span class="keyword">const</span> <span class="type">DetailScreen</span>({
+    <span class="type">super</span>.key, 
+    <span class="keyword">required</span> <span class="keyword">this</span>.userName, 
+    <span class="keyword">required</span> <span class="keyword">this</span>.age,
+  });
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">Text</span>(<span class="string">'User: $userName, Age: $age'</span>);
+  }
+}</div>
+    </div>
+  </div>
+
+  <!-- TAB 3: Named Routes -->
+  <div id="tab3" class="section">
+    <h2>3. Named Routes</h2>
+    <div class="info-card">
+      <p>App တွင် Page ပမာဏ များပြားလာပါက Route များကို နာမည်တပ်၍ (ဥပမာ - <code>'/home'</code>, <code>'/details'</code>) <code>MaterialApp</code> ၏ <code>routes: {}</code> ထဲတွင် စနစ်တကျ စုစည်းသတ်မှတ်ထားနိုင်ပါသည်။</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>အကျိုးကျေးဇူးများ:</h3>
+        <ul>
+          <li>Code များ ပိုမိုသန့်ရှင်းပြီး စနစ်တကျ ဖြစ်သွားခြင်း။</li>
+          <li><code>Navigator.pushNamed(context, '/details')</code> ဟု နာမည်ဖြင့် အလွယ်တကူ ခေါ်ယူနိုင်ခြင်း။</li>
+          <li><code>initialRoute: '/'</code> ဖြင့် စတင်ပွင့်မည့် Screen ကို သတ်မှတ်နိုင်ခြင်း။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// 1. MaterialApp တွင် Routes သတ်မှတ်ခြင်း</span>
+<span class="type">MaterialApp</span>(
+  initialRoute: <span class="string">'/'</span>,
+  routes: {
+    <span class="string">'/'</span>: (context) => <span class="keyword">const</span> <span class="type">HomeScreen</span>(),
+    <span class="string">'/profile'</span>: (context) => <span class="keyword">const</span> <span class="type">ProfileScreen</span>(),
+    <span class="string">'/settings'</span>: (context) => <span class="keyword">const</span> <span class="type">SettingsScreen</span>(),
+  },
+);
+
+<span class="comment">// 2. Route Name ဖြင့် Page ရွှေ့ခြင်း</span>
+<span class="type">Navigator</span>.pushNamed(context, <span class="string">'/profile'</span>);</div>
+    </div>
+  </div>
+
+  <!-- TAB 4: GoRouter Concept -->
+  <div id="tab4" class="section">
+    <h2>4. Modern Routing: GoRouter Concept</h2>
+    <div class="info-card">
+      <p>Web Browser URLs, Deep-Linking နှင့် Complex Navigation (Nested Tab Bars) များအတွက် Flutter Official မှ အကြံပြုထားသော <code>go_router</code> package ဖြစ်ပါသည်။</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>အဓိက အင်္ဂါရပ်များ:</h3>
+        <ul>
+          <li>URL Path များအတိုင်း သွားလာနိုင်ခြင်း (ဥပမာ - <code>/user/123</code>)။</li>
+          <li>Declarative Routing ဖြစ်သဖြင့် Web URL ကို တိုက်ရိုက်ရိုက်ထည့်ပါက သက်ဆိုင်ရာ Page သို့ ရောက်ရှိခြင်း။</li>
+          <li>Auth State ပေါ်မူတည်၍ Login မဝင်ရသေးပါက Login Page သို့ အလိုအလျောက် Redirect ခိုင်းနိုင်ခြင်း။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// GoRouter သုံးစွဲပုံ (pub.dev မှ go_router လိုအပ်သည်)</span>
+<span class="keyword">final</span> GoRouter _router = <span class="type">GoRouter</span>(
+  routes: [
+    <span class="type">GoRoute</span>(
+      path: <span class="string">'/'</span>,
+      builder: (context, state) => <span class="keyword">const</span> <span class="type">HomeScreen</span>(),
+    ),
+    <span class="type">GoRoute</span>(
+      path: <span class="string">'/details'</span>,
+      builder: (context, state) => <span class="keyword">const</span> <span class="type">DetailsScreen</span>(),
+    ),
+  ],
+);
+
+<span class="comment">// Page ရွှေ့နည်း</span>
+context.go(<span class="string">'/details'</span>);</div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Complete Tutorial Code -->
+  <div id="tab5" class="section">
+    <h2>5. Complete Navigation Tutorial Code <span class="badge">main.dart</span></h2>
+    <p>အောက်ပါ Code ကို ကူးယူပြီး သင်၏ Flutter project ထဲရှိ <code>lib/main.dart</code> ထဲတွင် အစားထိုး၍ <code>flutter run</code> ဖြင့် စမ်းသပ်နိုင်ပါသည်။</p>
+
+    <div class="code-box"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+
+<span class="keyword">void</span> <span class="function">main</span>() {
+  <span class="function">runApp</span>(<span class="keyword">const</span> <span class="type">NavigationApp</span>());
+}
+
+<span class="keyword">class</span> <span class="type">NavigationApp</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">NavigationApp</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">MaterialApp</span>(
+      debugShowCheckedModeBanner: <span class="keyword">false</span>,
+      title: <span class="string">'Navigation Tutorial'</span>,
+      theme: <span class="type">ThemeData</span>(primarySwatch: <span class="type">Colors</span>.blue),
+      <span class="comment">// Named Routes သတ်မှတ်ခြင်း</span>
+      initialRoute: <span class="string">'/'</span>,
+      routes: {
+        <span class="string">'/'</span>: (context) => <span class="keyword">const</span> <span class="type">HomeScreen</span>(),
+        <span class="string">'/second'</span>: (context) => <span class="keyword">const</span> <span class="type">SecondScreen</span>(),
+      },
+    );
+  }
+}
+
+<span class="comment">// --- 1. HOME SCREEN ---</span>
+<span class="keyword">class</span> <span class="type">HomeScreen</span> <span class="keyword">extends</span> <span class="type">StatefulWidget</span> {
+  <span class="keyword">const</span> <span class="type">HomeScreen</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">State</span>&lt;<span class="type">HomeScreen</span>&gt; <span class="function">createState</span>() => <span class="type">_HomeScreenState</span>();
+}
+
+<span class="keyword">class</span> <span class="type">_HomeScreenState</span> <span class="keyword">extends</span> <span class="type">State</span>&lt;<span class="type">HomeScreen</span>&gt; {
+  <span class="type">String</span> _returnedData = <span class="string">'No data received yet'</span>;
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">Scaffold</span>(
+      appBar: <span class="type">AppBar</span>(
+        title: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Home Screen (Page 1)'</span>),
+        centerTitle: <span class="keyword">true</span>,
+      ),
+      body: <span class="type">Center</span>(
+        child: <span class="type">Padding</span>(
+          padding: <span class="keyword">const</span> <span class="type">EdgeInsets</span>.all(<span class="string">16.0</span>),
+          child: <span class="type">Column</span>(
+            mainAxisAlignment: <span class="type">MainAxisAlignment</span>.center,
+            children: [
+              <span class="type">Text</span>(
+                <span class="string">'Result from Page 2: $_returnedData'</span>,
+                style: <span class="keyword">const</span> <span class="type">TextStyle</span>(fontSize: <span class="string">16</span>, fontWeight: <span class="type">FontWeight</span>.bold),
+              ),
+              <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">20</span>),
+              
+              <span class="comment">// 1. Basic Push with Data</span>
+              <span class="type">ElevatedButton</span>(
+                onPressed: () <span class="keyword">async</span> {
+                  <span class="comment">// SecondScreen ထံသို့ Data ပါး၍ ရလဒ်ပြန်စောင့်ခြင်း</span>
+                  <span class="keyword">final</span> result = <span class="keyword">await</span> <span class="type">Navigator</span>.push(
+                    context,
+                    <span class="type">MaterialPageRoute</span>(
+                      builder: (context) => <span class="keyword">const</span> <span class="type">DetailScreen</span>(
+                        title: <span class="string">'Data from Home Screen'</span>,
+                      ),
+                    ),
+                  );
+
+                  <span class="keyword">if</span> (result != <span class="keyword">null</span>) {
+                    <span class="function">setState</span>(() {
+                      _returnedData = result;
+                    });
+                  }
+                },
+                child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'1. Go to Detail Screen (Pass & Receive Data)'</span>),
+              ),
+              <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">10</span>),
+
+              <span class="comment">// 2. Named Route Push</span>
+              <span class="type">OutlinedButton</span>(
+                onPressed: () {
+                  <span class="type">Navigator</span>.pushNamed(context, <span class="string">'/second'</span>);
+                },
+                child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'2. Go to Second Screen (Named Route)'</span>),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+<span class="comment">// --- 2. DETAIL SCREEN (Data Pass/Receive Example) ---</span>
+<span class="keyword">class</span> <span class="type">DetailScreen</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">final</span> <span class="type">String</span> title;
+
+  <span class="keyword">const</span> <span class="type">DetailScreen</span>({<span class="type">super</span>.key, <span class="keyword">required</span> <span class="keyword">this</span>.title});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">Scaffold</span>(
+      appBar: <span class="type">AppBar</span>(
+        title: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Detail Screen'</span>),
+        backgroundColor: <span class="type">Colors</span>.green,
+      ),
+      body: <span class="type">Center</span>(
+        child: <span class="type">Column</span>(
+          mainAxisAlignment: <span class="type">MainAxisAlignment</span>.center,
+          children: [
+            <span class="type">Text</span>(<span class="string">'Received Title: $title'</span>, style: <span class="keyword">const</span> <span class="type">TextStyle</span>(fontSize: <span class="string">18</span>)),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">20</span>),
+            <span class="type">ElevatedButton</span>(
+              style: <span class="type">ElevatedButton</span>.styleFrom(backgroundColor: <span class="type">Colors</span>.green),
+              onPressed: () {
+                <span class="comment">// Back ပြန်ထွက်ပြီး Data ပြန်ပေးလိုက်ခြင်း</span>
+                <span class="type">Navigator</span>.pop(context, <span class="string">'Success! Process Completed.'</span>);
+              },
+              child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Send Success Data & Back'</span>),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+<span class="comment">// --- 3. SECOND SCREEN (Named Route Example) ---</span>
+<span class="keyword">class</span> <span class="type">SecondScreen</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">SecondScreen</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">Scaffold</span>(
+      appBar: <span class="type">AppBar</span>(
+        title: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Second Screen (Named Route)'</span>),
+        backgroundColor: <span class="type">Colors</span>.orange,
+      ),
+      body: <span class="type">Center</span>(
+        child: <span class="type">ElevatedButton</span>(
+          style: <span class="type">ElevatedButton</span>.styleFrom(backgroundColor: <span class="type">Colors</span>.orange),
+          onPressed: () {
+            <span class="type">Navigator</span>.pop(context);
+          },
+          child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Go Back'</span>),
+        ),
+      ),
+    );
+  }
+}</div>
+  </div>
+
+  <footer>
+    <p>Flutter Curriculum - Phase 2 Tutorial © 2026</p>
+  </footer>
+
+  <script>
+    function showTab(tabId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(sec => sec.classList.remove('active'));
+
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flutter Phase 6: Native Features Tutorial</title>
+    <style>
+      :root {
+        --primary: #02569b;
+        --secondary: #0175c2;
+        --accent: #00d2ff;
+        --bg-dark: #0d1117;
+        --card-bg: #161b22;
+        --code-bg: #0d1117;
+        --text-main: #f0f6fc;
+        --text-sub: #8b949e;
+        --border: #30363d;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+      }
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        line-height: 1.6;
+        padding: 20px;
+      }
+      header {
+        text-align: center;
+        padding: 30px 20px;
+        background: linear-gradient(135deg, #02569b, #0175c2);
+        border-radius: 12px;
+        margin-bottom: 25px;
+      }
+      header h1 {
+        font-size: 2rem;
+        color: #fff;
+      }
+      header p {
+        color: #e6f0ff;
+      }
+      .nav-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 25px;
+        overflow-x: auto;
+      }
+      .tab-btn {
+        background-color: var(--card-bg);
+        color: var(--text-sub);
+        border: 1px solid var(--border);
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .tab-btn.active {
+        background-color: var(--secondary);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .section {
+        display: none;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 25px;
+      }
+      .section.active {
+        display: block;
+      }
+      h2 {
+        color: var(--accent);
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 8px;
+        margin-bottom: 18px;
+      }
+      .grid-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 900px) {
+        .grid-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+      .code-box {
+        background-color: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        color: #e6edf3;
+        white-space: pre;
+        overflow-x: auto;
+      }
+      .keyword {
+        color: #ff7b72;
+      }
+      .type {
+        color: #ffa657;
+      }
+      .string {
+        color: #a5d6ff;
+      }
+      .comment {
+        color: #8b949e;
+      }
+      .info-card {
+        background-color: rgba(56, 139, 253, 0.1);
+        border-left: 4px solid #388bfd;
+        padding: 12px;
+        margin-bottom: 15px;
+      }
+      .back-btn {
+        display: inline-block;
+        margin-bottom: 15px;
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-btn">⬅ Back to Profile Home</a>
+
+    <header>
+      <h1>Flutter Phase 6: Native Capabilities & Packages</h1>
+      <p>
+        ဖုန်း၏ Camera, Location GPS နှင့် Device Hardware များကို
+        ချိတ်ဆက်အသုံးပြုနည်း
+      </p>
+    </header>
+
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="showTab('tab1')">
+        1. Image Picker (Camera/Gallery)
+      </button>
+      <button class="tab-btn" onclick="showTab('tab2')">
+        2. Geolocator (GPS Location)
+      </button>
+      <button class="tab-btn" onclick="showTab('tab3')">
+        3. Pub.dev Ecosystem
+      </button>
+      <button class="tab-btn" onclick="showTab('tab4')">
+        4. Complete Executable Code
+      </button>
+    </div>
+
+    <div id="tab1" class="section active">
+      <h2>1. Camera & Gallery Access</h2>
+      <div class="info-card">
+        <p>
+          <code>image_picker</code> package ကို သုံး၍ ဖုန်း၏ Camera သို့မဟုတ်
+          Photo Gallery မှ ဓာတ်ပုံများ ရယူခြင်း။
+        </p>
+      </div>
+      <div class="grid-layout">
+        <div>
+          <h3>အဓိက ပါဝင်မှုများ:</h3>
+          <ul>
+            <li><code>ImageSource.gallery</code>: Gallery မှ ရွေးရန်။</li>
+            <li><code>ImageSource.camera</code>: Camera တိုက်ရိုက်ရိုက်ရန်။</li>
+          </ul>
+        </div>
+        <div class="code-box">
+          <span class="keyword">final</span> picker =
+          <span class="type">ImagePicker</span>();
+          <span class="keyword">final</span> image =
+          <span class="keyword">await</span> picker.pickImage( source:
+          <span class="type">ImageSource</span>.gallery, );
+        </div>
+      </div>
+    </div>
+
+    <div id="tab2" class="section">
+      <h2>2. Device Location (GPS)</h2>
+      <div class="info-card">
+        <p>
+          <code>geolocator</code> package ကို သုံး၍ ဖုန်း၏ လက်ရှိ GPS
+          Latitude/Longitude တည်နေရာကို ရယူခြင်း။
+        </p>
+      </div>
+      <div class="grid-layout">
+        <div>
+          <h3>Location Permissions:</h3>
+          <ul>
+            <li>
+              iOS / Android permission များကို
+              <code>AndroidManifest.xml</code> နှင့်
+              <code>Info.plist</code> ထဲတွင် တောင်းခံပေးရပါမည်။
+            </li>
+          </ul>
+        </div>
+        <div class="code-box">
+          <span class="type">Position</span> pos =
+          <span class="keyword">await</span>
+          <span class="type">Geolocator</span>.getCurrentPosition(
+          desiredAccuracy: <span class="type">LocationAccuracy</span>.high, );
+        </div>
+      </div>
+    </div>
+
+    <div id="tab3" class="section">
+      <h2>3. Pub.dev Ecosystem</h2>
+      <div class="info-card">
+        <p>
+          Flutter ၏ တရားဝင် Package ရတနာသိုက်ဖြစ်သော <strong>pub.dev</strong> မှ
+          စိစစ်ပြီးသား Open-source Packages များကို ရှာဖွေသုံးစွဲနည်း။
+        </p>
+      </div>
+      <div class="grid-layout">
+        <div>
+          <h3>အသုံးများသော Packages များ:</h3>
+          <ul>
+            <li>
+              <code>url_launcher</code>: Web Link သို့မဟုတ် Phone Dial ခေါ်ရန်။
+            </li>
+            <li><code>flutter_local_notifications</code>: Push Alert ပြရန်။</li>
+          </ul>
+        </div>
+        <div class="code-box">
+          <span class="comment"># Package အသစ် ထည့်သွင်းနည်း</span> flutter pub
+          add url_launcher
+        </div>
+      </div>
+    </div>
+
+    <div id="tab4" class="section">
+      <h2>4. Complete Executable Code (main.dart)</h2>
+      <p>
+        <code>pubspec.yaml</code> တွင်
+        <code>image_picker: ^1.0.7</code> ထည့်သွင်းပြီး အောက်ပါ Code ကို Run
+        နိုင်ပါသည် -
+      </p>
+      <div class="code-box">
+        <span class="keyword">import</span>
+        <span class="string">'package:flutter/material.dart'</span>;
+        <span class="keyword">import</span>
+        <span class="string">'package:image_picker/image_picker.dart'</span>;
+
+        <span class="keyword">void</span> main() =>
+        <span class="function">runApp</span>(<span class="keyword">const</span>
+        <span class="type">NativeApp</span>());
+
+        <span class="keyword">class</span> <span class="type">NativeApp</span>
+        <span class="keyword">extends</span>
+        <span class="type">StatelessWidget</span> {
+        <span class="keyword">const</span>
+        <span class="type">NativeApp</span>({<span class="type">super</span
+        >.key});
+
+        <span class="type">@override</span>
+        <span class="type">Widget</span>
+        <span class="function">build</span>(<span class="type"
+          >BuildContext</span
+        >
+        context) { <span class="keyword">return</span>
+        <span class="type">MaterialApp</span>( home:
+        <span class="type">Scaffold</span>( appBar:
+        <span class="type">AppBar</span>(title:
+        <span class="keyword">const</span> <span class="type">Text</span>(<span
+          class="string"
+          >'Phase 6: Image Picker Demo'</span
+        >)), body: <span class="type">Center</span>( child:
+        <span class="type">ElevatedButton</span>.icon( icon:
+        <span class="keyword">const</span> <span class="type">Icon</span>(<span
+          class="type"
+          >Icons</span
+        >.photo), label: <span class="keyword">const</span>
+        <span class="type">Text</span>(<span class="string"
+          >'Pick Image from Gallery'</span
+        >), onPressed: () <span class="keyword">async</span> {
+        <span class="keyword">final</span> picker =
+        <span class="type">ImagePicker</span>();
+        <span class="keyword">final</span> image =
+        <span class="keyword">await</span> picker.pickImage(source:
+        <span class="type">ImageSource</span>.gallery);
+        <span class="keyword">if</span> (image !=
+        <span class="keyword">null</span>) { print(<span class="string"
+          >'Picked Image Path: ${image.path}'</span
+        >); } }, ), ), ), ); } }
+      </div>
+    </div>
+
+    <script>
+      function showTab(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        event.currentTarget.classList.add("active");
+      }
+    </script>
+  </body>
+</html>

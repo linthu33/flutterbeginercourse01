@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flutter Phase 3: State Management (BLoC / Cubit) Tutorial</title>
+  <style>
+    :root {
+      --primary: #02569B;
+      --secondary: #0175C2;
+      --accent: #00D2FF;
+      --bg-dark: #0d1117;
+      --card-bg: #161b22;
+      --code-bg: #0d1117;
+      --text-main: #f0f6fc;
+      --text-sub: #8b949e;
+      --border: #30363d;
+      --highlight: #238636;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: linear-gradient(135deg, #02569B, #0175C2);
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    header p {
+      color: #e6f0ff;
+      font-size: 1.1rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .tab-btn {
+      background-color: var(--card-bg);
+      color: var(--text-sub);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background-color: var(--secondary);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .section {
+      display: none;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h2 {
+      color: var(--accent);
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      color: #58a6ff;
+      margin: 15px 0 8px 0;
+      font-size: 1.1rem;
+    }
+
+    p, ul {
+      margin-bottom: 15px;
+      color: #c9d1d9;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .code-box {
+      background-color: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Consolas', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: #e6edf3;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.45;
+    }
+
+    .keyword { color: #ff7b72; }
+    .type { color: #ffa657; }
+    .string { color: #a5d6ff; }
+    .comment { color: #8b949e; }
+    .function { color: #d2a8ff; }
+
+    .badge {
+      display: inline-block;
+      background-color: #238636;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .info-card {
+      background-color: rgba(56, 139, 253, 0.1);
+      border-left: 4px solid #388bfd;
+      padding: 12px 16px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-sub);
+      padding: 20px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Flutter Phase 3: State Management (BLoC / Cubit)</h1>
+    <p>Event-Driven Architecture ဖြင့် Enterprise Scale App များ ရေးသားနည်း လေ့လာရန်</p>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('tab1')">1. BLoC Architecture Concept</button>
+    <button class="tab-btn" onclick="showTab('tab2')">2. Events & States Definition</button>
+    <button class="tab-btn" onclick="showTab('tab3')">3. BLoC Class Implementation</button>
+    <button class="tab-btn" onclick="showTab('tab4')">4. BlocBuilder & BlocListener</button>
+    <button class="tab-btn" onclick="showTab('tab5')">5. Complete Executable Code</button>
+  </div>
+
+  <!-- TAB 1: Concept & Setup -->
+  <div id="tab1" class="section active">
+    <h2>1. BLoC Architecture Concept & Setup</h2>
+    <div class="info-card">
+      <p><strong>BLoC (Business Logic Component)</strong> ဆိုသည်မှာ UI မှ ပေးပို့လိုက်သော <strong>Events</strong> များကို လက်ခံပြီး Business Logic များ တွက်ချက်ကာ UI သို့ <strong>States</strong> များ ပြန်လည် ထုတ်ပေးသော (Stream-based) စနစ်ဖြစ်ပါသည်။</p>
+    </div>
+    
+    <div class="grid-layout">
+      <div>
+        <h3>BLoC ရဲ့ အဓိက အကျိုးကျေးဇူးများ:</h3>
+        <ul>
+          <li><strong>Predictable States:</strong> Event တစ်ခုချင်းစီအတွက် State ဘယ်လို ပြောင်းလဲမည်ကို အတိအကျ စီမံနိုင်ခြင်း။</li>
+          <li><strong>Separation of Concerns:</strong> UI ကို အလှဆင်ရန်သက်သက် ရေးသားပြီး Logic အားလုံးကို BLoC Class ထဲသို့ သီးသန့်ခွဲထုတ်နိုင်ခြင်း။</li>
+          <li><strong>Testing:</strong> Business Logic သီးသန့်ကို Unit Test ရေးရလွယ်ကူခြင်း။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment"># 1. pubspec.yaml ထဲတွင် flutter_bloc ထည့်သွင်းပါ</span>
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.3 <span class="comment"># Flutter BLoC Official Package</span>
+
+<span class="comment"># Terminal တွင် အောက်ပါ command ရိုက်ပါ</span>
+flutter pub get</div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Events & States -->
+  <div id="tab2" class="section">
+    <h2>2. Events & States Definition</h2>
+    <div class="info-card">
+      <p>BLoC ရေးသားရာတွင် အဓိက အစိတ်အပိုင်း (၂) ခုဖြစ်သည့် <strong>Events (UI မှ ခေါ်သော Action)</strong> နှင့် <strong>States (UI ပေါ် ပြသရမည့် Data)</strong> တို့ကို သီးသန့် Class များအဖြစ် သတ်မှတ်ပေးရပါသည်၊၊</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>အစိတ်အပိုင်းများ:</h3>
+        <ul>
+          <li><strong>Events:</strong> User ပြုလုပ်လိုက်သော Action များ (ဥပမာ - <code>AddTodoEvent</code>, <code>DeleteTodoEvent</code>)။</li>
+          <li><strong>States:</strong> UI တွင် ဖြစ်ပေါ်မည့် အခြေအနေများ (ဥပမာ - <code>TodoInitial</code>, <code>TodoLoading</code>, <code>TodoLoaded</code>)။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// 1. ABSTRACT EVENTS</span>
+<span class="keyword">abstract class</span> <span class="type">TodoEvent</span> {}
+
+<span class="keyword">class</span> <span class="type">AddTodoEvent</span> <span class="keyword">extends</span> <span class="type">TodoEvent</span> {
+  <span class="keyword">final</span> <span class="type">String</span> task;
+  <span class="type">AddTodoEvent</span>(<span class="keyword">this</span>.task);
+}
+
+<span class="keyword">class</span> <span class="type">RemoveTodoEvent</span> <span class="keyword">extends</span> <span class="type">TodoEvent</span> {
+  <span class="keyword">final</span> <span class="type">int</span> index;
+  <span class="type">RemoveTodoEvent</span>(<span class="keyword">this</span>.index);
+}
+
+<span class="comment">// 2. ABSTRACT STATES</span>
+<span class="keyword">abstract class</span> <span class="type">TodoState</span> {}
+
+<span class="keyword">class</span> <span class="type">TodoInitialState</span> <span class="keyword">extends</span> <span class="type">TodoState</span> {}
+
+<span class="keyword">class</span> <span class="type">TodoLoadedState</span> <span class="keyword">extends</span> <span class="type">TodoState</span> {
+  <span class="keyword">final</span> <span class="type">List</span>&lt;<span class="type">String</span>&gt; tasks;
+  <span class="type">TodoLoadedState</span>(<span class="keyword">this</span>.tasks);
+}</div>
+    </div>
+  </div>
+
+  <!-- TAB 3: BLoC Implementation -->
+  <div id="tab3" class="section">
+    <h2>3. BLoC Class Implementation</h2>
+    <div class="info-card">
+      <p><code>Bloc&lt;Event, State&gt;</code> ကို Extends လုပ်ပြီး <code>on&lt;Event&gt;</code> မက္ကနိဇမ်မှတစ်ဆင့် Event တစ်ခုချင်းစီအတွက် <code>emit(NewState)</code> ဖြင့် State အသစ်များကို ထုတ်ပေးရပါသည်၊၊</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>အဓိက ပါဝင်သောအရာများ:</h3>
+        <ul>
+          <li><strong><code>super(InitialState)</code>:</strong> စတင်ပွင့်ချိန်တွင် ရှိမည့် စာမျက်နှာ အခြေအနေ။</li>
+          <li><strong><code>on&lt;Event&gt;</code>:</strong> ဝင်လာသော Event ကို နားထောင်ပြီး Logic တွက်ချက်ခြင်း။</li>
+          <li><strong><code>emit()</code>:</strong> Logic တွက်ပြီးပါက State အသစ်ကို UI သို့ ပစ်လွှတ် (Emit) ပေးခြင်း။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="keyword">import</span> <span class="string">'package:flutter_bloc/flutter_bloc.dart'</span>;
+
+<span class="keyword">class</span> <span class="type">TodoBloc</span> <span class="keyword">extends</span> <span class="type">Bloc</span>&lt;<span class="type">TodoEvent</span>, <span class="type">TodoState</span>&gt; {
+  <span class="keyword">final</span> <span class="type">List</span>&lt;<span class="type">String</span>&gt; _tasks = [];
+
+  <span class="type">TodoBloc</span>() : <span class="keyword">super</span>(<span class="type">TodoInitialState</span>()) {
+    
+    <span class="comment">// Add Todo Event Handler</span>
+    <span class="function">on</span>&lt;<span class="type">AddTodoEvent</span>&gt;((event, emit) {
+      <span class="keyword">if</span> (event.task.isNotEmpty) {
+        _tasks.add(event.task);
+        <span class="function">emit</span>(<span class="type">TodoLoadedState</span>(<span class="type">List</span>.from(_tasks)));
+      }
+    });
+
+    <span class="comment">// Remove Todo Event Handler</span>
+    <span class="function">on</span>&lt;<span class="type">RemoveTodoEvent</span>&gt;((event, emit) {
+      _tasks.removeAt(event.index);
+      <span class="function">emit</span>(<span class="type">TodoLoadedState</span>(<span class="type">List</span>.from(_tasks)));
+    });
+  }
+}</div>
+    </div>
+  </div>
+
+  <!-- TAB 4: BlocBuilder & BlocListener -->
+  <div id="tab4" class="section">
+    <h2>4. BlocBuilder & BlocListener (UI)</h2>
+    <div class="info-card">
+      <p>UI ဘက်တွင် BLoC ကို အသုံးပြုရန်အတွက် <code>BlocProvider</code> ဖြင့် Wrap လုပ်ပြီး၊ <code>BlocBuilder</code> (UI ဆွဲရန်) သို့မဟုတ် <code>context.read&lt;Bloc&gt;().add(Event)</code> (Event ပို့ရန်) များကို သုံးရပါသည်၊၊</p>
+    </div>
+
+    <div class="grid-layout">
+      <div>
+        <h3>အရေးကြီးသော Widgets များ:</h3>
+        <ul>
+          <li><strong><code>BlocProvider</code>:</strong> BLoC Instance ကို Widget Tree ပေါ်သို့ တင်ပေးခြင်း။</li>
+          <li><strong><code>BlocBuilder</code>:</strong> State ပြောင်းတိုင်း UI ကို Rebuild ပြုလုပ်ပေးခြင်း။</li>
+          <li><strong><code>BlocListener</code>:</strong> State ပြောင်းချိန်တွင် Dialog ပြခြင်း၊ SnackBar ပြခြင်းစသော One-time Actions များအတွက် အသုံးပြုခြင်း။</li>
+          <li><strong><code>context.read&lt;Bloc&gt;().add()</code>:</strong> Event အသစ်တစ်ခု ပို့လွှတ်ရန် ခေါ်ယူခြင်း။</li>
+        </ul>
+      </div>
+
+      <div class="code-box"><span class="comment">// 1. Event တစ်ခု ပို့လွှတ်ခြင်း (Button Press)</span>
+<span class="type">ElevatedButton</span>(
+  onPressed: () {
+    context.<span class="function">read</span>&lt;<span class="type">TodoBloc</span>&gt;().<span class="function">add</span>(<span class="type">AddTodoEvent</span>(controller.text));
+  },
+  child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Add Task'</span>),
+)
+
+<span class="comment">// 2. State ကို စောင့်ကြည့်၍ UI ဆွဲခြင်း</span>
+<span class="type">BlocBuilder</span>&lt;<span class="type">TodoBloc</span>, <span class="type">TodoState</span>&gt;(
+  builder: (context, state) {
+    <span class="keyword">if</span> (state <span class="keyword">is</span> <span class="type">TodoLoadedState</span>) {
+      <span class="keyword">return</span> <span class="type">ListView</span>.builder(
+        itemCount: state.tasks.length,
+        itemBuilder: (context, index) => <span class="type">Text</span>(state.tasks[index]),
+      );
+    }
+    <span class="keyword">return</span> <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'No Tasks Available'</span>);
+  },
+)</div>
+    </div>
+  </div>
+
+  <!-- TAB 5: Complete Executable Code -->
+  <div id="tab5" class="section">
+    <h2>5. Complete Executable Code <span class="badge">main.dart</span></h2>
+    <p><code>pubspec.yaml</code> တွင် <code>flutter_bloc: ^8.1.3</code> ထည့်သွင်းပြီး အောက်ပါ Code ကို <code>lib/main.dart</code> ထဲတွင် အစားထိုး၍ Run နိုင်ပါသည်။</p>
+
+    <div class="code-box"><span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+<span class="keyword">import</span> <span class="string">'package:flutter_bloc/flutter_bloc.dart'</span>;
+
+<span class="keyword">void</span> <span class="function">main</span>() {
+  <span class="function">runApp</span>(<span class="keyword">const</span> <span class="type">MyApp</span>());
+}
+
+<span class="comment">// --- 1. EVENTS ---</span>
+<span class="keyword">abstract class</span> <span class="type">TodoEvent</span> {}
+
+<span class="keyword">class</span> <span class="type">AddTodoEvent</span> <span class="keyword">extends</span> <span class="type">TodoEvent</span> {
+  <span class="keyword">final</span> <span class="type">String</span> task;
+  <span class="type">AddTodoEvent</span>(<span class="keyword">this</span>.task);
+}
+
+<span class="keyword">class</span> <span class="type">RemoveTodoEvent</span> <span class="keyword">extends</span> <span class="type">TodoEvent</span> {
+  <span class="keyword">final</span> <span class="type">int</span> index;
+  <span class="type">RemoveTodoEvent</span>(<span class="keyword">this</span>.index);
+}
+
+<span class="comment">// --- 2. STATES ---</span>
+<span class="keyword">abstract class</span> <span class="type">TodoState</span> {}
+
+<span class="keyword">class</span> <span class="type">TodoInitialState</span> <span class="keyword">extends</span> <span class="type">TodoState</span> {}
+
+<span class="keyword">class</span> <span class="type">TodoLoadedState</span> <span class="keyword">extends</span> <span class="type">TodoState</span> {
+  <span class="keyword">final</span> <span class="type">List</span>&lt;<span class="type">String</span>&gt; tasks;
+  <span class="type">TodoLoadedState</span>(<span class="keyword">this</span>.tasks);
+}
+
+<span class="comment">// --- 3. BLOC CLASS ---</span>
+<span class="keyword">class</span> <span class="type">TodoBloc</span> <span class="keyword">extends</span> <span class="type">Bloc</span>&lt;<span class="type">TodoEvent</span>, <span class="type">TodoState</span>&gt; {
+  <span class="keyword">final</span> <span class="type">List</span>&lt;<span class="type">String</span>&gt; _tasks = [];
+
+  <span class="type">TodoBloc</span>() : <span class="keyword">super</span>(<span class="type">TodoInitialState</span>()) {
+    <span class="function">on</span>&lt;<span class="type">AddTodoEvent</span>&gt;((event, emit) {
+      <span class="keyword">if</span> (event.task.isNotEmpty) {
+        _tasks.add(event.task);
+        <span class="function">emit</span>(<span class="type">TodoLoadedState</span>(<span class="type">List</span>.from(_tasks)));
+      }
+    });
+
+    <span class="function">on</span>&lt;<span class="type">RemoveTodoEvent</span>&gt;((event, emit) {
+      _tasks.removeAt(event.index);
+      <span class="function">emit</span>(<span class="type">TodoLoadedState</span>(<span class="type">List</span>.from(_tasks)));
+    });
+  }
+}
+
+<span class="comment">// --- 4. MAIN APP ---</span>
+<span class="keyword">class</span> <span class="type">MyApp</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">MyApp</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="type">MaterialApp</span>(
+      debugShowCheckedModeBanner: <span class="keyword">false</span>,
+      title: <span class="string">'BLoC State Management Tutorial'</span>,
+      theme: <span class="type">ThemeData</span>(primarySwatch: <span class="type">Colors</span>.blue),
+      home: <span class="type">BlocProvider</span>(
+        create: (context) => <span class="type">TodoBloc</span>(),
+        child: <span class="keyword">const</span> <span class="type">TodoListScreen</span>(),
+      ),
+    );
+  }
+}
+
+<span class="comment">// --- 5. UI SCREEN ---</span>
+<span class="keyword">class</span> <span class="type">TodoListScreen</span> <span class="keyword">extends</span> <span class="type">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="type">TodoListScreen</span>({<span class="type">super</span>.key});
+
+  <span class="type">@override</span>
+  <span class="type">Widget</span> <span class="function">build</span>(<span class="type">BuildContext</span> context) {
+    <span class="keyword">final</span> <span class="type">TextEditingController</span> controller = <span class="type">TextEditingController</span>();
+
+    <span class="keyword">return</span> <span class="type">Scaffold</span>(
+      appBar: <span class="type">AppBar</span>(
+        title: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'BLoC Todo App'</span>),
+        centerTitle: <span class="keyword">true</span>,
+      ),
+      body: <span class="type">Padding</span>(
+        padding: <span class="keyword">const</span> <span class="type">EdgeInsets</span>.all(<span class="string">16.0</span>),
+        child: <span class="type">Column</span>(
+          children: [
+            <span class="comment">// Input Field & Add Button</span>
+            <span class="type">Row</span>(
+              children: [
+                <span class="type">Expanded</span>(
+                  child: <span class="type">TextField</span>(
+                    controller: controller,
+                    decoration: <span class="keyword">const</span> <span class="type">InputDecoration</span>(
+                      hintText: <span class="string">'Enter new task...'</span>,
+                      border: <span class="type">OutlineInputBorder</span>(),
+                    ),
+                  ),
+                ),
+                <span class="keyword">const</span> <span class="type">SizedBox</span>(width: <span class="string">10</span>),
+                <span class="type">ElevatedButton</span>(
+                  onPressed: () {
+                    <span class="comment">// BLoC ထဲသို့ Event ပို့ပေးခြင်း</span>
+                    context.<span class="function">read</span>&lt;<span class="type">TodoBloc</span>&gt;().<span class="function">add</span>(<span class="type">AddTodoEvent</span>(controller.text));
+                    controller.clear();
+                  },
+                  child: <span class="keyword">const</span> <span class="type">Text</span>(<span class="string">'Add'</span>),
+                ),
+              ],
+            ),
+            <span class="keyword">const</span> <span class="type">SizedBox</span>(height: <span class="string">20</span>),
+
+            <span class="comment">// BlocBuilder ဖြင့် State ကို စောင့်ကြည့်ကာ UI ဆွဲခြင်း</span>
+            <span class="type">Expanded</span>(
+              child: <span class="type">BlocBuilder</span>&lt;<span class="type">TodoBloc</span>, <span class="type">TodoState</span>&gt;(
+                builder: (context, state) {
+                  <span class="keyword">if</span> (state <span class="keyword">is</span> <span class="type">TodoInitialState</span>) {
+                    <span class="keyword">return</span> <span class="keyword">const</span> <span class="type">Center</span>(child: <span class="type">Text</span>(<span class="string">'No tasks added yet!'</span>));
+                  }
+
+                  <span class="keyword">if</span> (state <span class="keyword">is</span> <span class="type">TodoLoadedState</span>) {
+                    <span class="keyword">if</span> (state.tasks.isEmpty) {
+                      <span class="keyword">return</span> <span class="keyword">const</span> <span class="type">Center</span>(child: <span class="type">Text</span>(<span class="string">'No tasks available!'</span>));
+                    }
+
+                    <span class="keyword">return</span> <span class="type">ListView</span>.builder(
+                      itemCount: state.tasks.length,
+                      itemBuilder: (context, index) {
+                        <span class="keyword">return</span> <span class="type">Card</span>(
+                          child: <span class="type">ListTile</span>(
+                            title: <span class="type">Text</span>(state.tasks[index]),
+                            trailing: <span class="type">IconButton</span>(
+                              icon: <span class="keyword">const</span> <span class="type">Icon</span>(<span class="type">Icons</span>.delete, color: <span class="type">Colors</span>.red),
+                              onPressed: () {
+                                <span class="comment">// Remove Event ပို့ပေးခြင်း</span>
+                                context.<span class="function">read</span>&lt;<span class="type">TodoBloc</span>&gt;().<span class="function">add</span>(<span class="type">RemoveTodoEvent</span>(index));
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+
+                  <span class="keyword">return</span> <span class="keyword">const</span> <span class="type">SizedBox</span>.shrink();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}</div>
+  </div>
+
+  <footer>
+    <p>Flutter Curriculum - Phase 3 Tutorial (BLoC Version) © 2026</p>
+  </footer>
+
+  <script>
+    function showTab(tabId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(sec => sec.classList.remove('active'));
+
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
+</body>
+</html>

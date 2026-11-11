@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flutter Bloc API GET Method သင်ခန်းစာ</title>
+    <style>
+        :root {
+            --primary-color: #02569B;
+            --accent-color: #0175C2;
+            --bg-color: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text-color: #212529;
+            --code-bg: #1E1E1E;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin-top: 30px;
+        }
+
+        .analogy-box {
+            background-color: #E3F2FD;
+            border-left: 5px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .diagram-container {
+            text-align: center;
+            margin: 30px 0;
+            background-color: #FFF;
+            padding: 20px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .code-container {
+            position: relative;
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            background-color: #2D2D2D;
+            color: #DDD;
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        pre {
+            margin: 0;
+            padding: 15px;
+            overflow-x: auto;
+            color: #D4D4D4;
+            font-family: 'Consolas', 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+
+        .keyword { color: #569CD6; }
+        .class-name { color: #4EC9B0; }
+        .string { color: #CE9178; }
+        .comment { color: #57A64A; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚀 Flutter Bloc - API GET Request ရှင်းလင်းချက်</h1>
+
+    <!-- စားသောက်ဆိုင် Analogy Section -->
+    <div class="analogy-box">
+        <h3>💡 စားသောက်ဆိုင် ဥပမာ (Restaurant Analogy)</h3>
+        <p>API ကနေ Data ယူတာကို စားသောက်ဆိုင်မှာ <b>"မီနူးစာအုပ် တောင်းကြည့်ခြင်း"</b> နဲ့ ယှဉ်ကြည့်နိုင်ပါတယ် -</p>
+        <ul>
+            <li><b>UI (Customer):</b> စားသုံးသူက မီနူးစာအုပ် ကြည့်ချင်တယ်။</li>
+            <li><b>Event (FetchMenuEvent):</b> စားပွဲထိုးကို "မီနူးစာအုပ် ခဏပေးပါ" လို့ တောင်းဆိုလိုက်တယ်။</li>
+            <li><b>Bloc (Chef/Waiter):</b> စားပွဲထိုးက မီးဖိုချောင်/စတာရူးဆီ သွားပြီး မီနူးစာအုပ် သွားယူတယ်။</li>
+            <li><b>State (MenuState):</b>
+                <ul>
+                    <li><code>LoadingState:</code> မီနူးစာအုပ် သွားယူနေတုန်း စောင့်ဆိုင်းခိုင်းထားခြင်း။</li>
+                    <li><code>LoadedState:</code> မီနူးစာအုပ် ရလာပြီး စားသုံးသူကို ပြသခြင်း။</li>
+                    <li><code>ErrorState:</code> မီနူးစာအုပ် ပျောက်နေ၍ စားသုံးသူကို အဆင်မပြေကြောင်း ပြောခြင်း။</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- SVG Diagram Section -->
+    <h2>📊 API GET BLoC Architecture Flow Chart</h2>
+    <div class="diagram-container">
+        <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- UI Node -->
+            <rect x="20" y="80" width="130" height="60" rx="8" fill="#42A5F5" />
+            <text x="85" y="115" fill="white" font-weight="bold" text-anchor="middle">1. UI (Screen)</text>
+
+            <!-- Arrow UI to Bloc -->
+            <path d="M 150 95 L 220 95" stroke="#1E88E5" stroke-width="3" marker-end="url(#arrow)" />
+            <text x="185" y="85" fill="#333" font-size="11" text-anchor="middle">Fetch Event</text>
+
+            <!-- Bloc Node -->
+            <rect x="230" y="80" width="130" height="60" rx="8" fill="#1E88E5" />
+            <text x="295" y="115" fill="white" font-weight="bold" text-anchor="middle">2. TodoBloc</text>
+
+            <!-- Arrow Bloc to Repo -->
+            <path d="M 360 95 L 430 95" stroke="#1E88E5" stroke-width="3" marker-end="url(#arrow)" />
+            <text x="395" y="85" fill="#333" font-size="11" text-anchor="middle">Get Data</text>
+
+            <!-- Repo/API Node -->
+            <rect x="440" y="80" width="150" height="60" rx="8" fill="#1565C0" />
+            <text x="515" y="115" fill="white" font-weight="bold" text-anchor="middle">3. API Repository</text>
+
+            <!-- Arrow Return State -->
+            <path d="M 295 140 L 295 180 L 85 180 L 85 140" fill="none" stroke="#43A047" stroke-width="3" marker-end="url(#arrow-green)" />
+            <text x="190" y="175" fill="#2E7D32" font-size="12" font-weight="bold" text-anchor="middle">4. Emit State (Loading / Loaded / Error)</text>
+
+            <!-- Markers -->
+            <defs>
+                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#1E88E5" />
+                </marker>
+                <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#43A047" />
+                </marker>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- Executable Code Block Section -->
+    <h2>💻 Complete Flutter Code Example</h2>
+    <p>အောက်ပါ Code ကို ကော်ပီယူ၍ Flutter Project ၏ <code>main.dart</code> တွင် ထည့်သွင်း စမ်းသပ်နိုင်ပါသည်။ (<code>http</code> နှင့် <code>flutter_bloc</code> package ထည့်ရန် လိုအပ်ပါသည်)</p>
+
+    <div class="code-container">
+        <div class="code-header">
+            <span>main.dart</span>
+            <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+        </div>
+        <pre id="codeBlock"><code><span class="keyword">import</span> <span class="string">'dart:convert'</span>;
+<span class="keyword">import</span> <span class="string">'package:flutter/material.dart'</span>;
+<span class="keyword">import</span> <span class="string">'package:flutter_bloc/flutter_bloc.dart'</span>;
+<span class="keyword">import</span> <span class="string">'package:http/http.dart'</span> <span class="keyword">as</span> http;
+
+<span class="comment">// 1. MODEL</span>
+<span class="keyword">class</span> <span class="class-name">Todo</span> {
+  <span class="keyword">final</span> <span class="class-name">int</span> id;
+  <span class="keyword">final</span> <span class="class-name">String</span> title;
+
+  <span class="class-name">Todo</span>({<span class="keyword">required</span> <span class="keyword">this</span>.id, <span class="keyword">required</span> <span class="keyword">this</span>.title});
+
+  <span class="keyword">factory</span> <span class="class-name">Todo</span>.fromJson(<span class="class-name">Map</span>&lt;<span class="class-name">String</span>, <span class="class-name">dynamic</span>&gt; json) {
+    <span class="keyword">return</span> <span class="class-name">Todo</span>(id: json[<span class="string">'id'</span>], title: json[<span class="string">'title'</span>]);
+  }
+}
+
+<span class="comment">// 2. REPOSITORY (API GET)</span>
+<span class="keyword">class</span> <span class="class-name">TodoRepository</span> {
+  <span class="keyword">Future</span>&lt;<span class="class-name">List</span>&lt;<span class="class-name">Todo</span>&gt;&gt; fetchTodos() <span class="keyword">async</span> {
+    <span class="keyword">final</span> response = <span class="keyword">await</span> http.get(Uri.parse(<span class="string">'https://jsonplaceholder.typicode.com/todos?_limit=5'</span>));
+    <span class="keyword">if</span> (response.statusCode == <span class="string">200</span>) {
+      <span class="keyword">final</span> <span class="class-name">List</span> data = json.decode(response.body);
+      <span class="keyword">return</span> data.map((e) =&gt; <span class="class-name">Todo</span>.fromJson(e)).toList();
+    } <span class="keyword">else</span> {
+      <span class="keyword">throw</span> <span class="class-name">Exception</span>(<span class="string">'Failed to load data'</span>);
+    }
+  }
+}
+
+<span class="comment">// 3. BLOC EVENTS & STATES</span>
+<span class="keyword">abstract</span> <span class="keyword">class</span> <span class="class-name">TodoEvent</span> {}
+<span class="keyword">class</span> <span class="class-name">FetchTodosEvent</span> <span class="keyword">extends</span> <span class="class-name">TodoEvent</span> {}
+
+<span class="keyword">abstract</span> <span class="keyword">class</span> <span class="class-name">TodoState</span> {}
+<span class="keyword">class</span> <span class="class-name">TodoLoadingState</span> <span class="keyword">extends</span> <span class="class-name">TodoState</span> {}
+<span class="keyword">class</span> <span class="class-name">TodoLoadedState</span> <span class="keyword">extends</span> <span class="class-name">TodoState</span> {
+  <span class="keyword">final</span> <span class="class-name">List</span>&lt;<span class="class-name">Todo</span>&gt; todos;
+  <span class="class-name">TodoLoadedState</span>(<span class="keyword">this</span>.todos);
+}
+<span class="keyword">class</span> <span class="class-name">TodoErrorState</span> <span class="keyword">extends</span> <span class="class-name">TodoState</span> {
+  <span class="keyword">final</span> <span class="class-name">String</span> message;
+  <span class="class-name">TodoErrorState</span>(<span class="keyword">this</span>.message);
+}
+
+<span class="comment">// 4. BLOC CLASS</span>
+<span class="keyword">class</span> <span class="class-name">TodoBloc</span> <span class="keyword">extends</span> <span class="class-name">Bloc</span>&lt;<span class="class-name">TodoEvent</span>, <span class="class-name">TodoState</span>&gt; {
+  <span class="keyword">final</span> <span class="class-name">TodoRepository</span> repository;
+
+  <span class="class-name">TodoBloc</span>(<span class="keyword">this</span>.repository) : <span class="keyword">super</span>(<span class="class-name">TodoLoadingState</span>()) {
+    on&lt;<span class="class-name">FetchTodosEvent</span>&gt;((event, emit) <span class="keyword">async</span> {
+      emit(<span class="class-name">TodoLoadingState</span>());
+      <span class="keyword">try</span> {
+        <span class="keyword">final</span> todos = <span class="keyword">await</span> repository.fetchTodos();
+        emit(<span class="class-name">TodoLoadedState</span>(todos));
+      } <span class="keyword">catch</span> (e) {
+        emit(<span class="class-name">TodoErrorState</span>(e.toString()));
+      }
+    });
+  }
+}
+
+<span class="comment">// 5. MAIN UI</span>
+<span class="keyword">void</span> main() {
+  runApp(
+    <span class="class-name">RepositoryProvider</span>(
+      create: (context) =&gt; <span class="class-name">TodoRepository</span>(),
+      child: <span class="class-name">BlocProvider</span>(
+        create: (context) =&gt; <span class="class-name">TodoBloc</span>(context.read&lt;<span class="class-name">TodoRepository</span>&gt;())..add(<span class="class-name">FetchTodosEvent</span>()),
+        child: <span class="keyword">const</span> <span class="class-name">MaterialApp</span>(home: <span class="class-name">TodoListScreen</span>()),
+      ),
+    ),
+  );
+}
+
+<span class="keyword">class</span> <span class="class-name">TodoListScreen</span> <span class="keyword">extends</span> <span class="class-name">StatelessWidget</span> {
+  <span class="keyword">const</span> <span class="class-name">TodoListScreen</span>({<span class="keyword">super</span>.key});
+
+  @override
+  <span class="class-name">Widget</span> build(<span class="class-name">BuildContext</span> context) {
+    <span class="keyword">return</span> <span class="class-name">Scaffold</span>(
+      appBar: <span class="class-name">AppBar</span>(title: <span class="keyword">const</span> <span class="class-name">Text</span>(<span class="string">'API GET via BLoC'</span>)),
+      body: <span class="class-name">BlocBuilder</span>&lt;<span class="class-name">TodoBloc</span>, <span class="class-name">TodoState</span>&gt;(
+        builder: (context, state) {
+          <span class="keyword">if</span> (state <span class="keyword">is</span> <span class="class-name">TodoLoadingState</span>) {
+            <span class="keyword">return</span> <span class="keyword">const</span> <span class="class-name">Center</span>(child: <span class="class-name">CircularProgressIndicator</span>());
+          } <span class="keyword">else</span> <span class="keyword">if</span> (state <span class="keyword">is</span> <span class="class-name">TodoLoadedState</span>) {
+            <span class="keyword">return</span> <span class="class-name">ListView</span>.builder(
+              itemCount: state.todos.length,
+              itemBuilder: (context, index) =&gt; <span class="class-name">ListTile</span>(
+                title: <span class="class-name">Text</span>(state.todos[index].title),
+              ),
+            );
+          } <span class="keyword">else</span> <span class="keyword">if</span> (state <span class="keyword">is</span> <span class="class-name">TodoErrorState</span>) {
+            <span class="keyword">return</span> <span class="class-name">Center</span>(child: <span class="class-name">Text</span>(state.message));
+          }
+          <span class="keyword">return</span> <span class="keyword">const</span> <span class="class-name">SizedBox</span>.shrink();
+        },
+      ),
+    );
+  }
+}</code></pre>
+    </div>
+</div>
+
+<script>
+    function copyCode() {
+        const codeText = document.getElementById('codeBlock').innerText;
+        navigator.clipboard.writeText(codeText).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.innerText = 'Copied!';
+            btn.style.backgroundColor = '#43A047';
+            setTimeout(() => {
+                btn.innerText = 'Copy Code';
+                btn.style.backgroundColor = '#0175C2';
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>

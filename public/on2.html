@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures & Algorithms Comprehensive Guide</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Pyidaungsu', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-6">
+    <div class="max-w-6xl mx-auto space-y-10">
+        
+        <!-- Header Section -->
+        <header class="text-center space-y-3">
+            <h1 class="text-4xl font-bold text-emerald-400">⚡ Data Structures & Algorithms Cheat Sheet</h1>
+            <p class="text-slate-400 text-lg">ရှင်းလင်းချက်များ၊ လက်တွေ့ဥပမာများနှင့် Production အသုံးချမှုများ အပြည့်အစုံ</p>
+        </header>
+
+        <!-- Big O Quick Reference Cards -->
+        <section class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-center shadow-lg">
+                <span class="text-emerald-400 font-mono font-bold text-xl">O(1)</span>
+                <p class="text-xs text-slate-400 mt-1">Constant (အမြန်ဆုံး / Key ဖြင့်ရှာခြင်း)</p>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-center shadow-lg">
+                <span class="text-blue-400 font-mono font-bold text-xl">O(log n)</span>
+                <p class="text-xs text-slate-400 mt-1">Logarithmic (Binary Search / DB Index)</p>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-center shadow-lg">
+                <span class="text-yellow-400 font-mono font-bold text-xl">O(n)</span>
+                <p class="text-xs text-slate-400 mt-1">Linear (Loop တစ်ကြိမ်ပတ်ခြင်း)</p>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-center shadow-lg">
+                <span class="text-orange-400 font-mono font-bold text-xl">O(n log n)</span>
+                <p class="text-xs text-slate-400 mt-1">Log-Linear (Sorting / Merge Sort)</p>
+            </div>
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 text-center shadow-lg col-span-2 md:col-span-1">
+                <span class="text-red-400 font-mono font-bold text-xl">O(n²)</span>
+                <p class="text-xs text-slate-400 mt-1">Quadratic (Nested Loops - ရှောင်ရန်)</p>
+            </div>
+        </section>
+
+        <!-- Main Data Structures Table -->
+        <section class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-slate-800 bg-slate-900/80">
+                <h2 class="text-2xl font-bold text-slate-200">📊 Data Structures Complexity & Overview</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-950 text-slate-400 text-sm uppercase tracking-wider">
+                            <th class="p-4">Data Structure</th>
+                            <th class="p-4">Access</th>
+                            <th class="p-4">Search</th>
+                            <th class="p-4">Insertion</th>
+                            <th class="p-4">Deletion</th>
+                            <th class="p-4">Production Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-sm">
+                        <tr class="hover:bg-slate-800/50">
+                            <td class="p-4 font-semibold text-emerald-400">Array</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-yellow-400 font-mono">O(n)</td>
+                            <td class="p-4 text-orange-400 font-mono">O(n)</td>
+                            <td class="p-4 text-orange-400 font-mono">O(n)</td>
+                            <td class="p-4 text-slate-300">Index သိပြီးသား Data များကို စဉ်ဆက်မပြတ် သိမ်းရန်</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/50">
+                            <td class="p-4 font-semibold text-emerald-400">Hash Map (Object)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-slate-300">Redis Cache, Caching, Key-Value Lookups</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/50">
+                            <td class="p-4 font-semibold text-emerald-400">Stack (LIFO)</td>
+                            <td class="p-4 text-orange-400 font-mono">O(n)</td>
+                            <td class="p-4 text-orange-400 font-mono">O(n)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-slate-300">Browser History, Undo/Redo, App Navigator Stack</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/50">
+                            <td class="p-4 font-semibold text-emerald-400">Queue (FIFO)</td>
+                            <td class="p-4 text-orange-400 font-mono">O(n)</td>
+                            <td class="p-4 text-orange-400 font-mono">O(n)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-emerald-400 font-mono">O(1)</td>
+                            <td class="p-4 text-slate-300">RabbitMQ, Background Jobs, Video Processing</td>
+                        </tr>
+                        <tr class="hover:bg-slate-800/50">
+                            <td class="p-4 font-semibold text-emerald-400">Binary Search Tree</td>
+                            <td class="p-4 text-blue-400 font-mono">O(log n)</td>
+                            <td class="p-4 text-blue-400 font-mono">O(log n)</td>
+                            <td class="p-4 text-blue-400 font-mono">O(log n)</td>
+                            <td class="p-4 text-blue-400 font-mono">O(log n)</td>
+                            <td class="p-4 text-slate-300">Database Indexing (B-Trees / MongoDB / MySQL)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Code Examples & Explanations Section -->
+        <section class="space-y-6">
+            <h2 class="text-2xl font-bold text-emerald-400">💻 လက်တွေ့ ကုဒ်ဥပမာများနှင့် ရှင်းလင်းချက်များ</h2>
+
+            <!-- Example 1: O(1) Hash Map -->
+            <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-4 shadow-xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-emerald-300">1. O(1) - Hash Map (Object) ဖြင့် Data ရှာဖွေခြင်း</h3>
+                    <span class="px-3 py-1 bg-emerald-950 text-emerald-400 rounded-full text-xs font-mono">Time: O(1)</span>
+                </div>
+                <p class="text-slate-300 text-sm">
+                    <strong>ရှင်းလင်းချက်:</strong> Array လို အစကနေ အဆုံး လိုက်မရှաဘဲ Key ကို အသုံးပြု၍ Memory နေရာသို့ တိုက်ရိုက် သွားရောက် ယူဆောင်ခြင်း ဖြစ်ပါသည်။
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl font-mono text-sm text-slate-200 overflow-x-auto border border-slate-800">
+                    <pre><span class="text-purple-400">const</span> usersMap = {
+    <span class="text-green-300">"u001"</span>: { name: <span class="text-green-300">"Aung Aung"</span>, role: <span class="text-green-300">"Admin"</span> },
+    <span class="text-green-300">"u999"</span>: { name: <span class="text-green-300">"Zaw Zaw"</span>, role: <span class="text-green-300">"User"</span> }
+};
+
+<span class="text-slate-500">// O(1) ဖြင့် ချက်ချင်းခေါ်ယူခြင်း</span>
+console.log(usersMap[<span class="text-green-300">"u999"</span>].name); <span class="text-slate-500">// Output: Zaw Zaw</span></pre>
+                </div>
+            </div>
+
+            <!-- Example 2: O(log n) Binary Search -->
+            <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-4 shadow-xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-blue-300">2. O(log n) - Binary Search (ထက်ဝက်စီ ပိုင်းခြားရှာဖွေခြင်း)</h3>
+                    <span class="px-3 py-1 bg-blue-950 text-blue-400 rounded-full text-xs font-mono">Time: O(log n)</span>
+                </div>
+                <p class="text-slate-300 text-sm">
+                    <strong>ရှင်းလင်းချက်:</strong> စီစဉ်ထားပြီးသား (Sorted) Data များထဲမှ အလယ်ကိန်းကို ယူ၍ လိုချင်သောတန်ဖိုး ကြီး/ငယ်အလိုက် တစ်ဝက်စီ ပယ်ချကာ အမြန်ဆုံး ရှာဖွေပေးခြင်း ဖြစ်ပါသည်။
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl font-mono text-sm text-slate-200 overflow-x-auto border border-slate-800">
+                    <pre><span class="text-purple-400">function</span> <span class="text-yellow-300">binarySearch</span>(arr, target) {
+    <span class="text-purple-400">let</span> left = 0, right = arr.length - 1;
+    <span class="text-purple-400">while</span> (left &lt;= right) {
+        <span class="text-purple-400">let</span> mid = Math.floor((left + right) / 2);
+        <span class="text-purple-400">if</span> (arr[mid] === target) <span class="text-purple-400">return</span> mid;
+        <span class="text-purple-400">if</span> (arr[mid] &lt; target) left = mid + 1;
+        <span class="text-purple-400">else</span> right = mid - 1;
+    }
+    <span class="text-purple-400">return</span> -1;
+}
+console.log(binarySearch([2, 5, 8, 12, 16, 23], 16)); <span class="text-slate-500">// Output: 4 (Index)</span></pre>
+                </div>
+            </div>
+
+            <!-- Example 3: O(n) Linear Search -->
+            <div class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-4 shadow-xl">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xl font-semibold text-yellow-300">3. O(n) - Linear Search (Loop တစ်ကြိမ်ပတ်ခြင်း)</h3>
+                    <span class="px-3 py-1 bg-yellow-950 text-yellow-400 rounded-full text-xs font-mono">Time: O(n)</span>
+                </div>
+                <p class="text-slate-300 text-sm">
+                    <strong>ရှင်းလင်းချက်:</strong> Data အရေအတွက် (n) တိုးလာသည်နှင့်အမျှ လုပ်ဆောင်ရမည့် အကြိမ်အရေအတွက်ပါ တိုက်ရိုက် အချိုးကျ တက်လာခြင်း ဖြစ်ပါသည်။
+                </p>
+                <div class="bg-slate-950 p-4 rounded-xl font-mono text-sm text-slate-200 overflow-x-auto border border-slate-800">
+                    <pre><span class="text-purple-400">const</span> numbers = [10, 20, 30, 40, 50];
+<span class="text-purple-400">const</span> found = numbers.<span class="text-yellow-300">find</span>(n => n === 30);
+console.log(found); <span class="text-slate-500">// Output: 30</span></pre>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-slate-500 text-sm pb-8">
+            <p>Designed for Full-Stack Software Engineering & System Architecture Production Standards.</p>
+        </footer>
+
+    </div>
+</body>
+</html>

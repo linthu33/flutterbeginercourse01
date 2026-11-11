@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Node.js & Flutter Microservice Architecture</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #0f172a;
+        color: #f8fafc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1100px;
+        background-color: #1e293b;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 10px;
+        color: #38bdf8;
+        font-size: 28px;
+      }
+
+      p.description {
+        color: #94a3b8;
+        margin-bottom: 25px;
+        font-size: 15px;
+      }
+
+      .img-container {
+        width: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid #334155;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        margin-bottom: 30px;
+        background-color: #0b1120;
+      }
+
+      .img-container img {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      .architecture-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        text-align: left;
+      }
+
+      .tier-card {
+        background-color: #0f172a;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .tier-title {
+        font-size: 13px;
+        font-weight: bold;
+        color: #38bdf8;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid #334155;
+        padding-bottom: 8px;
+      }
+
+      .component-box {
+        background-color: #1e293b;
+        border: 1px solid #475569;
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .tech-tag {
+        font-size: 11px;
+        color: #cbd5e1;
+        margin-top: 4px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Node.js & Flutter Microservice Architecture</h1>
+      <p class="description">
+        Client App, API Gateway, Node.js Microservices, Databases, and Message
+        Broker Flow Diagram
+      </p>
+
+      <!-- Flow Diagram Image -->
+      <div class="img-container">
+        <img
+          src="watermarked_img_1485786197756043290.jpg"
+          alt="Node.js and Flutter Microservice Architecture Flow Diagram"
+        />
+      </div>
+
+      <!-- Tier Overview Grid -->
+      <div class="architecture-grid">
+        <div class="tier-card">
+          <div class="tier-title">Client Tier</div>
+          <div class="component-box">
+            <strong>Flutter Mobile App</strong>
+            <span class="tech-tag">HTTPS / WebSockets</span>
+          </div>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-title">API Gateway Tier</div>
+          <div class="component-box">
+            <strong>API Gateway</strong>
+            <span class="tech-tag">Routing & Authentication</span>
+          </div>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-title">Microservices Tier</div>
+          <div class="component-box">
+            <strong>Node.js Services</strong>
+            <span class="tech-tag">Auth, User, Product, Order</span>
+          </div>
+        </div>
+
+        <div class="tier-card">
+          <div class="tier-title">Message Broker</div>
+          <div class="component-box">
+            <strong>Event-Driven</strong>
+            <span class="tech-tag">RabbitMQ / Kafka</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

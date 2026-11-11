@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production System Engineering & Architecture Guide</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Pyidaungsu', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-6">
+    <div class="max-w-6xl mx-auto space-y-10">
+        
+        <!-- Header Section -->
+        <header class="text-center space-y-3">
+            <h1 class="text-4xl font-bold text-emerald-400">🚀 Production System Architecture & DSA Guide</h1>
+            <p class="text-slate-400 text-lg">သုံးစွဲသူ ၁ သိန်းကျော် (100k+ Users) ရှိသော စနစ်များအတွက် ထည့်သွင်းစဉ်းစားရမည့် ထိပ်တန်း အချက်များ</p>
+        </header>
+
+        <!-- Section 1: Traffic & Workload Calculation -->
+        <section class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-6 shadow-2xl">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                <span class="text-2xl">📈</span>
+                <h2 class="text-2xl font-bold text-emerald-300">1. Traffic နှင့် Workload ကို ဦးစွာ တွက်ချက်ခြင်း (Capacity Planning)</h2>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                စနစ်တစ်ခု မတည်ဆောက်မီ သုံးစွဲသူ အရေအတွက်ပေါ် မူတည်၍ Server ပေါ်သို့ ကျရောက်လာမည့် ဝန်ထုပ်ဝန်ပိုး (Workload) ကို ကြိုတင် တွက်ချက်ရပါမည်။ ဥပမာအားဖြင့် <strong class="text-white">စုစုပေါင်း သုံးစွဲသူ ၁၀၀,၀၀০ (100k Users)</strong> ရှိသော စနစ်တစ်ခုအတွက်:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <span class="text-emerald-400 font-bold text-lg">DAU (Daily Active Users)</span>
+                    <p class="text-slate-400 text-xs mt-1">ပုံမှန်အားဖြင့် Total Users ၏ ၁၀% မှ ၂၀% ခန့် (၁၀,၀၀၀ မှ ၂၀,၀၀၀ ဦး) သည် တစ်နေ့တာအတွင်း ဝင်ရောက် အသုံးပြုကြပါသည်။</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <span class="text-blue-400 font-bold text-lg">Concurrent Users</span>
+                    <p class="text-slate-400 text-xs mt-1">Peak Hours (အလုပ်အများဆုံး အချိန်) တွင် တစ်ပြိုင်နက်တည်း ဝင်ရောက်နေသူ ၁,၀၀၀ မှ ၂,၀၀၀ ဦးအထိ ရှိနိုင်ပါသည်။</p>
+                </div>
+                <div class="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <span class="text-yellow-400 font-bold text-lg">RPS (Requests Per Second)</span>
+                    <p class="text-slate-400 text-xs mt-1">User တစ်ဦးလျှင် 1 Request နှုန်းဖြင့် Peak Time တွင် Server သည် 1k - 2k RPS ကို လက်ခံပေးနိုင်ရန် လိုအပ်ပါသည်။</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Array O(n) vs Hash Map O(1) Comparison in Production -->
+        <section class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-6 shadow-2xl">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                <span class="text-2xl">⚡</span>
+                <h2 class="text-2xl font-bold text-emerald-300">2. Array ရှာဖွေခြင်း O(n) နှင့် Hash Map O(1) Production နှိုင်းယှဉ်ချက်</h2>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Production တွင် Data များပြားလာသည်နှင့်အမျှ Data Structure ရွေးချယ်မှုသည် Server ၏ CPU Load ကို တိုက်ရိုက် သက်ရောက်စေပါသည်။
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Array O(n) -->
+                <div class="bg-slate-950 p-5 rounded-xl border border-red-950/50 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-red-400">Array ရှာဖွေခြင်း (Linear Search)</h3>
+                        <span class="px-2 py-0.5 bg-red-950 text-red-400 rounded text-xs font-mono">O(n) - နှေးကွေးသည်</span>
+                    </div>
+                    <p class="text-slate-300 text-xs">
+                        Data (၁ သန်း) ရှိသော Array ထဲမှ User တစ်ဦးကို ရှာသည့်အခါ `.find()` သို့မဟုတ် Loop ဖြင့် အစမှအဆုံး တစ်ခုချင်းစီ လိုက်စစ်ရသဖြင့် Data များလေလေ အချိန်ကြာလေလေ ဖြစ်ပါသည်။
+                    </p>
+                    <div class="bg-slate-900 p-3 rounded font-mono text-xs text-slate-300 overflow-x-auto">
+                        <pre>// Data 10,000 ခုရှိလျှင် 10,000 ခา လိုက်စစ်ရသည်
+const user = usersArray.find(u => u.id === "u999"); // O(n)</pre>
+                    </div>
+                </div>
+                <!-- Hash Map O(1) -->
+                <div class="bg-slate-950 p-5 rounded-xl border border-emerald-950/50 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-emerald-400">Hash Map ရှာဖွေခြင်း (Key-Value)</h3>
+                        <span class="px-2 py-0.5 bg-emerald-950 text-emerald-400 rounded text-xs font-mono">O(1) - အလွန်မြန်သည်</span>
+                    </div>
+                    <p class="text-slate-300 text-xs">
+                        Production တွင် Array အစား Object သို့မဟုတ် Redis (In-memory Cache) ကို အသုံးပြု၍ Key ဖြင့် တိုက်ရိုက်ခေါ်ယူပါက Data ဘယ်လောက်များပါစေ ချက်ချင်း ရရှိနိုင်ပါသည်။
+                    </p>
+                    <div class="bg-slate-900 p-3 rounded font-mono text-xs text-slate-300 overflow-x-auto">
+                        <pre>// Key ဖြင့် Memory နေရာသို့ တိုက်ရိုက်သွားယူသည်
+const user = usersMap["u999"]; // O(1) (Instant)</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Multi-Layer Infrastructure Architecture -->
+        <section class="bg-slate-900 rounded-2xl p-6 border border-slate-800 space-y-6 shadow-2xl">
+            <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+                <span class="text-2xl">🏗️</span>
+                <h2 class="text-2xl font-bold text-emerald-300">3. Multi-Layer Infrastructure Architecture (100k+ Users)</h2>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                သုံးစွဲသူ ၁ သိန်းကျော်အတွက် Server တစ်လုံးတည်းကို အသုံးမပြုဘဲ Traffic များကို အလွှာလိုက် ခွဲဝေဆောင်ရွက်သော Architecture ကို တည်ဆောက်ရပါသည်။
+            </p>
+            <div class="bg-slate-950 p-6 rounded-xl border border-slate-800 space-y-4 font-mono text-sm text-center">
+                <div class="p-3 bg-emerald-950/40 border border-emerald-800/50 rounded-lg text-emerald-300">
+                    🌐 Cloudflare Edge & Zero Trust Tunnels (DDoS Protection & SSL)
+                </div>
+                <div class="text-slate-600">▼</div>
+                <div class="p-3 bg-blue-950/40 border border-blue-800/50 rounded-lg text-blue-300">
+                    ⚖️ Nginx Reverse Proxy & Load Balancer
+                </div>
+                <div class="text-slate-600">▼</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                        <span class="text-yellow-400 font-bold block mb-1">App Layer (PM2 Cluster)</span>
+                        <span class="text-xs text-slate-400">Node.js Workers (vCPU 4-6) running via Docker Containers</span>
+                    </div>
+                    <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg">
+                        <span class="text-purple-400 font-bold block mb-1">Cache Layer (Redis)</span>
+                        <span class="text-xs text-slate-400">O(1) In-memory Session & Frequent Data Caching</span>
+                    </div>
+                </div>
+                <div class="text-slate-600">▼</div>
+                <div class="p-3 bg-indigo-950/40 border border-indigo-800/50 rounded-lg text-indigo-300">
+                    🗄️ Database Layer (MongoDB Replica Set `rs0` with B-Tree Indexes - O(log n))
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-slate-500 text-sm pb-8">
+            <p>Designed for Full-Stack Software Engineering & Production Scale Standards.</p>
+        </footer>
+
+    </div>
+</body>
+</html>

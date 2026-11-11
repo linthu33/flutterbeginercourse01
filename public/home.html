@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flutter Curriculum Roadmap (Phase 1 - 6)</title>
+    <style>
+      :root {
+        --primary: #02569b;
+        --secondary: #0175c2;
+        --accent: #13b9fd;
+        --bg: #0d1117;
+        --card-bg: #161b22;
+        --text: #f0f6fc;
+        --text-sub: #8b949e;
+        --btn-green: #238636;
+        --btn-green-hover: #2ea043;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+      }
+
+      .slide-container {
+        width: 85vw;
+        max-width: 1000px;
+        height: 75vh;
+        max-height: 600px;
+        position: relative;
+      }
+
+      .slide {
+        background-color: var(--card-bg);
+        border: 1px solid #30363d;
+        border-radius: 16px;
+        padding: 35px 45px;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .slide.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .badge {
+        background: linear-gradient(135deg, var(--secondary), var(--accent));
+        color: #fff;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        width: fit-content;
+        margin-bottom: 15px;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        font-size: 1.8rem;
+        color: #fff;
+        margin-bottom: 15px;
+      }
+
+      .subtitle {
+        color: var(--text-sub);
+        font-size: 1.05rem;
+        margin-bottom: 20px;
+      }
+
+      .content-list {
+        list-style: none;
+        flex-grow: 1;
+      }
+
+      .content-list li {
+        margin-bottom: 14px;
+        font-size: 1.05rem;
+        line-height: 1.5;
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .content-list li::before {
+        content: "➔";
+        color: var(--accent);
+        margin-right: 12px;
+        font-weight: bold;
+      }
+
+      .highlight {
+        color: var(--accent);
+        font-weight: bold;
+      }
+
+      /* Example Code Page သို့ သွားမည့် Action Area Style */
+      .slide-action {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #30363d;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .btn-example {
+        background-color: var(--btn-green);
+        color: #ffffff;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition:
+          background-color 0.2s ease,
+          transform 0.1s ease;
+      }
+
+      .btn-example:hover {
+        background-color: var(--btn-green-hover);
+        transform: translateY(-2px);
+      }
+
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 85vw;
+        max-width: 1000px;
+        margin-top: 20px;
+      }
+
+      .btn-nav {
+        background-color: var(--secondary);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+      }
+
+      .btn-nav:hover {
+        background-color: var(--accent);
+        color: #000;
+      }
+
+      .progress {
+        color: var(--text-sub);
+        font-size: 1rem;
+      }
+
+      /* Cover Slide Specific */
+      .slide.cover {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: radial-gradient(
+          circle at center,
+          #1a2332 0%,
+          var(--card-bg) 100%
+        );
+      }
+
+      .slide.cover h1 {
+        font-size: 3rem;
+        margin-bottom: 15px;
+      }
+
+      .slide.cover p {
+        font-size: 1.3rem;
+        color: var(--text-sub);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="slide-container">
+      <!-- Cover Slide -->
+      <div class="slide cover active">
+        <div class="badge">CURRICULUM ROADMAP</div>
+        <h1>Flutter Developer Journey</h1>
+        <p>Phase 1 မှ Phase 6 အထိ လေ့လာရမည့် Roadmap Presentation</p>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="slide">
+        <div class="badge">PHASE 1</div>
+        <h2>Layout Core & Basic Widgets</h2>
+        <p class="subtitle">
+          Widget များကို စနစ်တကျ နေရာချခြင်းနှင့် အခြေခံ UI တည်ဆောက်ခြင်း
+        </p>
+        <ul class="content-list">
+          <li>
+            <span class="highlight">Single-child Layouts:</span> Container,
+            Padding, Center, SizedBox, Expanded, Flexible
+          </li>
+          <li>
+            <span class="highlight">Multi-child Layouts:</span> Row, Column,
+            Stack (Widget များ ထပ်လျက်နေရာချရန်), Positioned
+          </li>
+          <li>
+            <span class="highlight">Scrollable Widgets:</span> ListView,
+            ListView.builder, GridView
+          </li>
+          <li>
+            <span class="highlight">Form Inputs:</span> TextField,
+            ElevatedButton, TextButton, Checkbox, Switch
+          </li>
+        </ul>
+        <div class="slide-action">
+          <a href="/phase1" class="btn-example">View Example Code ➔</a>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="slide">
+        <div class="badge">PHASE 2</div>
+        <h2>Navigation & Routing</h2>
+        <p class="subtitle">
+          Page တစ်ခုမှ တစ်ခုသို့ ကူးပြောင်းခြင်းနှင့် Data ပေးပို့ခြင်း
+        </p>
+        <ul class="content-list">
+          <li>
+            <span class="highlight">Basic Navigation:</span> Navigator.push()
+            နှင့် Navigator.pop() သုံးစွဲနည်း
+          </li>
+          <li>
+            <span class="highlight">Named Routes:</span> Route နာမည်များ
+            သတ်မှတ်၍ သွားလာခြင်း
+          </li>
+          <li>
+            <span class="highlight">Passing Data:</span> Page များအကြား
+            Data/Arguments များ လွှဲပြောင်းပေးပို့ခြင်း
+          </li>
+          <li>
+            <span class="highlight">GoRouter Package:</span> Web & Mobile
+            နှစ်ခုလုံးအတွက် Modern Deep-Linking စီမံခြင်း
+          </li>
+        </ul>
+        <div class="slide-action">
+          <a href="/phase2" class="btn-example">View Example Code ➔</a>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="slide">
+        <div class="badge">PHASE 3</div>
+        <h2>State Management (BLoC)</h2>
+        <p class="subtitle">
+          App အတွင်း Data ပြောင်းလဲမှုများကို စမတ်ကျကျ စီမံခန့်ခွဲခြင်း
+        </p>
+        <ul class="content-list">
+          <li>
+            <span class="highlight">Local State:</span> setState() ကို
+            မှန်ကန်စွာ သုံးတတ်ရန် (Widget တစ်ခုစာ)
+          </li>
+          <li>
+            <span class="highlight">Bloc / Cubit:</span> Enterprise App
+            ကြီးများအတွက် Event-Driven Architecture
+          </li>
+          <li>
+            <span class="highlight">BlocProvider & BlocBuilder:</span> UI နှင့်
+            Business Logic ကို သီးခြားစီ ခွဲထုတ်ရေးသားခြင်း
+          </li>
+          <li>
+            <span class="highlight">Events & States:</span> Input Events
+            များနှင့် Output States များ စီမံခြင်း
+          </li>
+        </ul>
+        <div class="slide-action">
+          <a href="/phase3" class="btn-example">View Example Code ➔</a>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="slide">
+        <div class="badge">PHASE 4</div>
+        <h2>Asynchronous & API Integration</h2>
+        <p class="subtitle">
+          Backend Server များနှင့် အင်တာနက်ပေါ်မှ Data များ လှမ်းယူခြင်း
+        </p>
+        <ul class="content-list">
+          <li>
+            <span class="highlight">Dart Async Basics:</span> Future,
+            async/await, Stream (Live Data များအတွက်)
+          </li>
+          <li>
+            <span class="highlight">HTTP Clients:</span> http သို့မဟုတ် dio
+            package (Headers, Interceptors)
+          </li>
+          <li>
+            <span class="highlight">JSON Parsing:</span> API မှလာသော JSON
+            များကို Dart Model Class အဖြစ် ပြောင်းလဲခြင်း
+          </li>
+          <li>
+            <span class="highlight">Handling States:</span> Loading, Success
+            နှင့် Error UI များကို ကိုင်တွယ်ခြင်း
+          </li>
+        </ul>
+        <div class="slide-action">
+          <a href="/phase4" class="btn-example">View Example Code ➔</a>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="slide">
+        <div class="badge">PHASE 5</div>
+        <h2>Local Data Storage</h2>
+        <p class="subtitle">
+          App ပိတ်လိုက်သော်လည်း ဖုန်းထဲတွင် Data များ ကျန်ရှိနေစေရန်
+          သိမ်းဆည်းခြင်း
+        </p>
+        <ul class="content-list">
+          <li>
+            <span class="highlight">Shared Preferences:</span> User Settings,
+            Theme, Auth Token များ အလွယ်သိမ်းရန်
+          </li>
+          <li>
+            <span class="highlight">SQFlite:</span> SQL Database ဖြင့် Data
+            များကို ဇယားလိုက် စနစ်တကျ သိမ်းဆည်းခြင်း
+          </li>
+          <li>
+            <span class="highlight">Hive / Isar:</span> NoSQL ပုံစံ -
+            အလွန်မြန်ဆန်သော Local Database များ
+          </li>
+        </ul>
+        <div class="slide-action">
+          <a href="/phase5" class="btn-example">View Example Code ➔</a>
+        </div>
+      </div>
+
+      <!-- Phase 6 -->
+      <div class="slide">
+        <div class="badge">PHASE 6</div>
+        <h2>Native Capabilities & Packages</h2>
+        <p class="subtitle">
+          ဖုန်း၏ Hardware များနှင့် ပြင်ပ Package များကို ချိတ်ဆက်သုံးစွဲခြင်း
+        </p>
+        <ul class="content-list">
+          <li>
+            <span class="highlight">Camera & Gallery:</span> image_picker
+            package ဖြင့် ဓာတ်ပုံရယူခြင်း
+          </li>
+          <li>
+            <span class="highlight">Location:</span> geolocator package ဖြင့်
+            GPS နေရာအတည်ပြုခြင်း
+          </li>
+          <li>
+            <span class="highlight">Local Notifications:</span> ဖုန်း၏
+            Notification စနစ်ကို အသုံးပြုခြင်း
+          </li>
+          <li>
+            <span class="highlight">Pub.dev Ecosystem:</span> လိုအပ်သော
+            Third-party Packages များကို ရှာဖွေသုံးစွဲခြင်း
+          </li>
+        </ul>
+        <div class="slide-action">
+          <a href="/phase6" class="btn-example">View Example Code ➔</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="controls">
+      <button id="prevBtn" class="btn-nav" onclick="changeSlide(-1)">
+        ❮ Previous
+      </button>
+      <div class="progress" id="progress">Slide 1 of 7</div>
+      <button id="nextBtn" class="btn-nav" onclick="changeSlide(1)">
+        Next ❯
+      </button>
+    </div>
+
+    <script>
+      let currentSlide = 0;
+      const slides = document.querySelectorAll(".slide");
+      const progress = document.getElementById("progress");
+
+      function updateSlides() {
+        slides.forEach((slide, index) => {
+          slide.classList.remove("active");
+          if (index === currentSlide) {
+            slide.classList.add("active");
+          }
+        });
+        progress.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+      }
+
+      function changeSlide(direction) {
+        currentSlide += direction;
+        if (currentSlide < 0) {
+          currentSlide = 0;
+        } else if (currentSlide >= slides.length) {
+          currentSlide = slides.length - 1;
+        }
+        updateSlides();
+      }
+
+      // Keyboard navigation (← and →)
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+          changeSlide(-1);
+        } else if (e.key === "ArrowRight") {
+          changeSlide(1);
+        }
+      });
+
+      updateSlides();
+    </script>
+  </body>
+</html>

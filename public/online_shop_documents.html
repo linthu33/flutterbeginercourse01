@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shop App - Project Documents & Architecture</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Myanmar:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans Myanmar', 'sans-serif'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151e2e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+        .tab-transition {
+            transition: all 0.3s ease;
+        }
+        .doc-table th {
+            background-color: #1e293b;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+        .doc-table tr {
+            border-bottom: 1px solid #334155;
+        }
+        .pulse-border {
+            box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4);
+            animation: pulse-teal 2s infinite;
+        }
+        @keyframes pulse-teal {
+            0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(20, 184, 166, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Header & Tabs -->
+    <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center py-4">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="bg-teal-500 text-white p-2 rounded-lg mr-3 shadow-lg shadow-teal-500/30">
+                        <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    </div>
+                    <h1 class="text-xl font-bold text-white tracking-wide">LETKHAN <span class="text-teal-400 font-medium">Docs & Architecture</span></h1>
+                </div>
+                
+                <!-- Tab Buttons -->
+                <nav class="flex space-x-1 overflow-x-auto w-full md:w-auto pb-1 md:pb-0" aria-label="Tabs">
+                    <button onclick="openTab(event, 'tab-prd')" class="tablink border-teal-500 text-teal-400 whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center tab-transition">
+                        <i class="fa-solid fa-list-check mr-2"></i> PRD
+                    </button>
+                    <button onclick="openTab(event, 'tab-arch')" class="tablink border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-300 whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center tab-transition">
+                        <i class="fa-solid fa-sitemap mr-2"></i> Architecture Spec
+                    </button>
+                    <button onclick="openTab(event, 'tab-erd')" class="tablink border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-300 whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center tab-transition">
+                        <i class="fa-solid fa-database mr-2"></i> Database ERD
+                    </button>
+                    <button onclick="openTab(event, 'tab-sdlc-traditional')" class="tablink border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-300 whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center tab-transition">
+                        <i class="fa-solid fa-arrows-split-up-and-left mr-2"></i> Traditional SDLC
+                    </button>
+                    <button onclick="openTab(event, 'tab-sdlc-ai')" class="tablink border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-300 whitespace-nowrap py-2 px-4 border-b-2 font-medium text-sm focus:outline-none flex items-center tab-transition">
+                        <i class="fa-solid fa-robot mr-2"></i> AI-Driven SDLC
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- TAB 1: PRD -->
+        <div id="tab-prd" class="tabcontent block animate-fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-white mb-2">Product Requirements Document (PRD)</h2>
+                <p class="text-slate-400">LETKHAN Online Shop App အတွက် အဓိက လုပ်ဆောင်ချက်များနှင့် လိုအပ်ချက်များ</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Epic 1 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
+                    <div class="bg-slate-700/50 px-6 py-4 border-b border-slate-700 flex items-center">
+                        <div class="bg-blue-500/20 text-blue-400 p-2 rounded-lg mr-3"><i class="fa-solid fa-user-lock"></i></div>
+                        <h3 class="text-lg font-bold text-slate-100">Epic 1: User Auth (အကောင့်စနစ်)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left doc-table text-sm">
+                            <thead><tr><th class="px-6 py-3">User Story</th><th class="px-6 py-3">Acceptance Criteria</th></tr></thead>
+                            <tbody class="text-slate-300">
+                                <tr>
+                                    <td class="px-6 py-4 align-top"><span class="font-semibold text-white block mb-1">User Registration</span>ဖုန်း/Email ဖြင့် အကောင့်ဖွင့်ခြင်း။</td>
+                                    <td class="px-6 py-4 align-top"><ul class="list-disc pl-4 space-y-1 text-slate-400"><li>ဖုန်း/Email နှင့် Password ထည့်သွင်းနိုင်ရမည်။</li><li>Data များကို MongoDB တွင် သိမ်းဆည်းရမည်။</li></ul></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 align-top"><span class="font-semibold text-white block mb-1">User Login</span>လုံခြုံစွာ လော့ဂ်အင် ဝင်ခြင်း။</td>
+                                    <td class="px-6 py-4 align-top"><ul class="list-disc pl-4 space-y-1 text-slate-400"><li>မှန်ကန်ပါက JWT Token ထုတ်ပေးရမည်။</li><li>မှားယွင်းပါက Error Message ပြရမည်။</li></ul></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Epic 2 -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden shadow-lg">
+                    <div class="bg-slate-700/50 px-6 py-4 border-b border-slate-700 flex items-center">
+                        <div class="bg-teal-500/20 text-teal-400 p-2 rounded-lg mr-3"><i class="fa-solid fa-magnifying-glass"></i></div>
+                        <h3 class="text-lg font-bold text-slate-100">Epic 2: Product Discovery (ပစ္စည်းရှာဖွေခြင်း)</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left doc-table text-sm">
+                            <thead><tr><th class="px-6 py-3">User Story</th><th class="px-6 py-3">Acceptance Criteria</th></tr></thead>
+                            <tbody class="text-slate-300">
+                                <tr>
+                                    <td class="px-6 py-4 align-top"><span class="font-semibold text-white block mb-1">Product Feed</span>Home တွင် နောက်ဆုံးရ ပစ္စည်းများပြသခြင်း။</td>
+                                    <td class="px-6 py-4 align-top"><ul class="list-disc pl-4 space-y-1 text-slate-400"><li>ပုံ၊ နာမည်၊ ဈေးနှုန်း Grid View ဖြင့် ပြသမည်။</li><li>Pagination ဖြင့် Data ဆွဲယူမည်။</li></ul></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ARCHITECTURE SPEC (System, API & Frontend) -->
+        <div id="tab-arch" class="tabcontent hidden animate-fade-in">
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl font-bold text-white mb-2">Comprehensive Architecture Specifications</h2>
+                <p class="text-slate-400">System Architecture အမျိုးအစားများ၊ API Protocols များနှင့် Frontend Architecture/State Management ပုံစံများ</p>
+            </div>
+
+            <!-- SECTION A: System Architecture Types -->
+            <div class="mb-10 bg-slate-800/60 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-teal-400 mb-4 flex items-center">
+                    <i class="fa-solid fa-building-shield mr-2"></i> 1. System Architecture Patterns
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+                        <h4 class="font-bold text-white mb-2 flex items-center"><i class="fa-solid fa-cube text-blue-400 mr-2"></i> Monolithic Architecture</h4>
+                        <p class="text-slate-400 text-sm mb-3">စနစ်တစ်ခုလုံး (UI, Business Logic, DB Access) ကို Module တစ်ခုတည်း (Single Codebase) တွင် ပေါင်းစပ်တည်ဆောက်ခြင်း။</p>
+                        <div class="text-xs bg-slate-700 text-slate-300 p-2 rounded"><strong>အားသာချက်:</strong> အစောပိုင်းအဆင့်တွင် မြန်ဆန်ခြင်း၊ Deploy ရ მარტივიခြင်း။</div>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl border-teal-500/50">
+                        <h4 class="font-bold text-white mb-2 flex items-center"><i class="fa-solid fa-cubes text-teal-400 mr-2"></i> Microservice Architecture (Selected)</h4>
+                        <p class="text-slate-400 text-sm mb-3">ဝန်ဆောင်မှုများကို သီးခြား Service ငယ်များ (Auth Service, Product Service, Order Service) အဖြစ် ခွဲထုတ်တည်ဆောက်ခြင်း။</p>
+                        <div class="text-xs bg-teal-950/40 text-teal-300 p-2 rounded border border-teal-800/50"><strong>LETKHAN Project:</strong> ရှေ့ဆက်ချဲ့ထွင်ရန်အတွက် Module-based/Modular Monolith မှ Microservice သို့ ကူးပြောင်းနိုင်သော ပုံစံဖြင့် တည်ဆောက်မည်။</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION B: API Architecture Protocols -->
+            <div class="mb-10 bg-slate-800/60 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-teal-400 mb-4 flex items-center">
+                    <i class="fa-solid fa-network-wired mr-2"></i> 2. API & Communication Protocols
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+                        <div class="text-blue-400 text-2xl mb-2"><i class="fa-solid fa-globe"></i></div>
+                        <h5 class="font-bold text-white text-sm">REST API</h5>
+                        <p class="text-slate-400 text-xs mt-1">HTTP Methods (GET, POST, PUT, DELETE) ဖြင့် Frontend နှင့် Backend ချိတ်ဆက်ရန် အဓိကသုံးသည်။</p>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+                        <div class="text-purple-400 text-2xl mb-2"><i class="fa-solid fa-bolt"></i></div>
+                        <h5 class="font-bold text-white text-sm">WebSockets (Socket.io)</h5>
+                        <p class="text-slate-400 text-xs mt-1">Real-time Chat နှင့် Order Status Updates များအတွက် Two-way communication သုံးသည်။</p>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+                        <div class="text-emerald-400 text-2xl mb-2"><i class="fa-solid fa-microchip"></i></div>
+                        <h5 class="font-bold text-white text-sm">gRPC</h5>
+                        <p class="text-slate-400 text-xs mt-1">High-performance microservices ကြား အမြန်ဆုံး Data ပို့ဆောင်ရန် (Protocol Buffers)။</p>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-4 rounded-xl text-center">
+                        <div class="text-amber-400 text-2xl mb-2"><i class="fa-solid fa-server"></i></div>
+                        <h5 class="font-bold text-white text-sm">SAP / ERP Integration</h5>
+                        <p class="text-slate-400 text-xs mt-1">Enterprise အဆင့် Inventory နှင့် Accounting စနစ်များနှင့် ချိတ်ဆက်ရန် (Webhooks/SOAP)။</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION C: Frontend Architecture & State Management -->
+            <div class="mb-10 bg-slate-800/60 border border-slate-700 rounded-2xl p-6 shadow-xl">
+                <h3 class="text-xl font-bold text-teal-400 mb-4 flex items-center">
+                    <i class="fa-solid fa-mobile-screen-button mr-2"></i> 3. Frontend Architecture & State (Flutter)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+                        <h4 class="font-bold text-white mb-2"><i class="fa-solid fa-layer-group text-cyan-400 mr-2"></i> Clean Architecture / Feature-First</h4>
+                        <p class="text-slate-400 text-sm mb-3">UI, Business Logic နှင့် Data Layer များကို သီးသန့်ခွဲထုတ်ထားသဖြင့် Maintenance လုပ်ရလွယ်ကူစေသည်။</p>
+                        <div class="text-xs font-mono text-slate-300 bg-slate-900 p-3 rounded border border-slate-700">
+                            lib/<br>
+                            ├── constants/<br>
+                            ├── models/<br>
+                            ├── services/ (Dio HTTP)<br>
+                            ├── repositories/<br>
+                            ├── logic/ (BLoC/Cubit)<br>
+                            └── ui/ (Screens & Widgets)
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl">
+                        <h4 class="font-bold text-white mb-2"><i class="fa-solid fa-sliders text-indigo-400 mr-2"></i> State Technology (BLoC / Cubit)</h4>
+                        <p class="text-slate-400 text-sm mb-3">UI နှင့် Business Logic ကို လုံးဝကင်းရှင်းစေရန် Flutter BLoC Pattern ကို အသုံးပြုသည်။</p>
+                        <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                            <li>Event ဝင်လာပါက State အသစ်သို့ ပြောင်းလဲပေးခြင်း</li>
+                            <li>Cart management နှင့် Authentication state များအတွက် အထူးသင့်လျော်ခြင်း</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Flow Diagram -->
+            <div class="bg-slate-800/50 rounded-2xl border border-slate-700 p-8 shadow-2xl">
+                <h4 class="text-center text-white font-bold mb-6">High-Level Data Flow Diagram</h4>
+                <div class="flex flex-col xl:flex-row items-center justify-center gap-4 xl:gap-6">
+                    <div class="flex flex-col items-center w-56 bg-slate-800 border border-slate-600 rounded-xl p-6 shadow-lg">
+                        <div class="text-blue-400 text-4xl mb-3"><i class="fa-solid fa-mobile-screen"></i></div>
+                        <h3 class="font-bold text-white text-base">Flutter App</h3>
+                        <p class="text-slate-400 text-xs">BLoC / Dio / Clean Arch</p>
+                    </div>
+                    <div class="text-slate-500 text-xl"><i class="fa-solid fa-arrow-right-arrow-left hidden xl:block"></i><i class="fa-solid fa-arrow-down xl:hidden"></i></div>
+                    <div class="flex flex-col items-center w-56 bg-slate-800 border border-slate-600 rounded-xl p-6 shadow-lg">
+                        <div class="text-green-400 text-4xl mb-3"><i class="fa-solid fa-server"></i></div>
+                        <h3 class="font-bold text-white text-base">Nginx Proxy</h3>
+                        <p class="text-slate-400 text-xs">SSL & Rate Limiting</p>
+                    </div>
+                    <div class="text-slate-500 text-xl"><i class="fa-solid fa-arrow-right hidden xl:block"></i><i class="fa-solid fa-arrow-down xl:hidden"></i></div>
+                    <div class="flex flex-col items-center w-56 bg-slate-800 border border-teal-500 pulse-border rounded-xl p-6 shadow-lg">
+                        <div class="text-teal-400 text-4xl mb-3"><i class="fa-brands fa-node-js"></i></div>
+                        <h3 class="font-bold text-white text-base">Node.js API</h3>
+                        <p class="text-slate-400 text-xs">Express, Socket.io, JWT</p>
+                    </div>
+                    <div class="text-slate-500 text-xl"><i class="fa-solid fa-arrow-right-arrow-left hidden xl:block"></i><i class="fa-solid fa-arrow-down xl:hidden"></i></div>
+                    <div class="flex flex-col items-center w-56 bg-slate-800 border border-slate-600 rounded-xl p-6 shadow-lg">
+                        <div class="text-emerald-500 text-4xl mb-3"><i class="fa-solid fa-database"></i></div>
+                        <h3 class="font-bold text-white text-base">MongoDB</h3>
+                        <p class="text-slate-400 text-xs">Mongoose Schemas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: DATABASE ERD -->
+        <div id="tab-erd" class="tabcontent hidden animate-fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-white mb-2">Database Schema (ERD)</h2>
+                <p class="text-slate-400">MongoDB Collection များ၏ ဖွဲ့စည်းပုံနှင့် ချိတ်ဆက်မှုများ</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Users Collection -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 shadow-lg overflow-hidden flex flex-col">
+                    <div class="bg-blue-900/30 px-5 py-3 border-b border-blue-800/50 flex justify-between items-center">
+                        <h3 class="font-bold text-blue-400 flex items-center"><i class="fa-solid fa-users mr-2"></i> Users</h3>
+                        <span class="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Collection</span>
+                    </div>
+                    <div class="p-4 flex-grow">
+                        <table class="w-full text-sm font-mono text-xs text-slate-300">
+                            <tbody>
+                                <tr class="border-b border-slate-700/50"><td class="py-2 text-amber-400">PK</td><td class="py-2">_id</td><td class="py-2 text-teal-400 text-right">ObjectId</td></tr>
+                                <tr class="border-b border-slate-700/50"><td></td><td class="py-2">name / phone</td><td class="py-2 text-teal-400 text-right">String</td></tr>
+                                <tr><td></td><td class="py-2 font-bold" colspan="2">cart_items [ Embedded Array ]</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: TRADITIONAL SDLC -->
+        <div id="tab-sdlc-traditional" class="tabcontent hidden animate-fade-in">
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl font-bold text-white mb-2">Traditional SDLC Workflow</h2>
+                <p class="text-slate-400">အစဉ်အလာ Software Development Life Cycle အဆင့်ဆင့်</p>
+            </div>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 text-center text-slate-300">
+                <p>Waterfall သို့မဟုတ် Agile Sprint ပုံစံဖြင့် အဆင့်လိုက် (Planning -> Analysis -> Design -> Coding -> Testing -> Deployment) သွားရောက်သော လုပ်ငန်းစဉ်ဖြစ်သည်။</p>
+            </div>
+        </div>
+
+        <!-- TAB 5: AI-DRIVEN SDLC -->
+        <div id="tab-sdlc-ai" class="tabcontent hidden animate-fade-in">
+            <div class="mb-8 text-center">
+                <h2 class="text-2xl font-bold text-white mb-2">AI-Driven SDLC Workflow</h2>
+                <p class="text-slate-400">AI ကိရိယာများ (Cursor, GitHub Copilot) ပေါင်းစပ်ထားသော ခေတ်သစ် SDLC</p>
+            </div>
+            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 text-center text-slate-300">
+                <p>AI assistance ဖြင့် PRD မှစ၍ Code Generation, Automated Testing နှင့် CI/CD Deployment အထိ အရှိန်မြှင့်တင်ဆောင်ရွက်သော စနစ်ဖြစ်သည်။</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-500 text-center py-6 text-sm">
+        <p>&copy; 2026 LETKHAN Online Shop Platform. Crafted with Flutter, Node.js & MongoDB.</p>
+    </footer>
+
+    <!-- JavaScript for Tabs -->
+    <script>
+        function openTab(evt, tabName) {
+            let tabcontent = document.getElementsByClassName("tabcontent");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.add("hidden");
+                tabcontent[i].classList.remove("block");
+            }
+            let tablinks = document.getElementsByClassName("tablink");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("border-teal-500", "text-teal-400");
+                tablinks[i].classList.add("border-transparent", "text-slate-400");
+            }
+            document.getElementById(tabName).classList.remove("hidden");
+            document.getElementById(tabName).classList.add("block");
+            evt.currentTarget.classList.remove("border-transparent", "text-slate-400");
+            evt.currentTarget.classList.add("border-teal-500", "text-teal-400");
+        }
+    </script>
+</body>
+</html>

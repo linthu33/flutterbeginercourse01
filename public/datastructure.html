@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures & Big Data Architecture Guide (Dark Theme)</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #1f2937;
+            --code-bg: #030712;
+            --code-text: #38bdf8;
+            --highlight-bg: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: var(--card-bg);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 14px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background: #1f2937;
+            color: var(--text-main);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 2px 4px rgb(59 130 246 / 0.4);
+        }
+
+        /* Tab Content Containers */
+        .tab-content {
+            display: none;
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.05rem;
+            color: #60a5fa;
+            margin: 15px 0 8px 0;
+        }
+
+        p, li {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        /* Relationship Cards Grid */
+        .rel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .rel-card {
+            background: var(--highlight-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .rel-icon {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            margin: 15px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1f2937;
+            color: var(--text-main);
+        }
+
+        td {
+            background-color: #0f172a;
+        }
+
+        .highlight-box {
+            background: var(--highlight-bg);
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Data Structures & Big Data Architecture</h1>
+        <p>Comprehensive guide on Structured, Semi-structured, Unstructured Data, Relationships, Normalization, and Big Data Architecture.</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab(event, 'tab1')">1. Structured</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab2')">2. Semi-Structured</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab3')">3. Unstructured</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab4')">4. Array & Object Array</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab5')">5. To Big Data</button>
+        <button class="tab-btn" onclick="switchTab(event, 'tab6')">6. What's Next?</button>
+    </div>
+
+    <!-- Tab 1: Structured Data -->
+    <div id="tab1" class="tab-content active">
+        <h2>Structured Data & Relationship Design (ဖွဲ့စည်းပုံကျသော ဒေတာနှင့် ဆက်နွှယ်မှုများ)</h2>
+        <p>Column တွေ၊ Row တွေနဲ့ တိကျတဲ့ Data Model (Schema) တည်ဆောက်ပုံရှိသော Relational Databases (MySQL, PostgreSQL) များအတွက် ဒီဇိုင်းဆွဲရာတွင် အဓိက လေ့လာရမည့် အပိုင်းများ -</p>
+
+        <h3>1. Relationships Types (ဆက်နွှယ်မှုပုံစံများ)</h3>
+        <div class="rel-grid">
+            <div class="rel-card">
+                <div class="rel-icon">👤 🪪</div>
+                <strong>One-to-One (1:1)</strong>
+                <p>အရာဝတ္ထုတစ်ခုသည် အခြားအရာဝတ္ထုတစ်ခုနှင့်သာ တိုက်ရိုက်သက်ဆိုင်ခြင်း။ <br><em>ဥပမာ - User တစ်ဦးလျှင် User Profile တစ်ခုသာရှိခြင်း။</em></p>
+            </div>
+            <div class="rel-card">
+                <div class="rel-icon">👤 📦📦</div>
+                <strong>One-to-Many (1:M)</strong>
+                <p>အရာဝတ္ထုတစ်ခုသည် အခြားအရာဝတ္ထု အများအပြားနှင့် ချိတ်ဆက်နိုင်ခြင်း။ <br><em>ဥပမာ - User တစ်ဦးက Order များစွာ တင်နိုင်ခြင်း (Foreign Key သုံးသည်)။</em></p>
+            </div>
+            <div class="rel-card">
+                <div class="rel-icon">🛒 🛍️</div>
+                <strong>Many-to-Many (M:N)</strong>
+                <p>အရာဝတ္ထုအများအပြားသည် အပြန်အလှန် အများအပြားနှင့် ချိတ်ဆက်ခြင်း။ <br><em>ဥပမာ - Order တစ်ခုတွင် Product အများကြီးပါနိုင်ပြီး Product တစ်ခုလည်း Order များစွာတွင် ပါနိုင်ခြင်း (Pivot Table လိုအပ်သည်)။</em></p>
+            </div>
+        </div>
+
+        <h3>2. Normalization စဉ်းစားရမည့် အခြေအနေများ</h3>
+        <p>Database ထဲတွင် Data တွေ ထပ်ခါထပ်ခါ မဖြစ်စေရန် (Redundancy မဖြစ်ရန်) နှင့် Data Integrity ကောင်းမွန်စေရန် Normalization လုပ်ဆောင်ရာတွင် အောက်ပါအချက်များကို စဉ်းစားရပါမည် -</p>
+        <ul>
+            <li><strong>1NF (First Normal Form):</strong> Column တစ်ခုချင်းစီတွင် တန်ဖိုးတစ်ခုတည်း (Atomic Value) သာ ရှိရမည်။ ကော်မာခံပြီး ဒေတာများကို တစ်ကွက်ထဲ ပေါင်းမထည့်ရပါ။</li>
+            <li><strong>2NF (Second Normal Form):</strong> Composite Primary Key ရှိနေသည့်အခါ Non-key column တိုင်းသည် Primary Key အားလုံးအပေါ်တွင် အပြည့်အဝ မှီခိုနေရမည် (Partial Dependency ဖယ်ရှားခြင်း)။</li>
+            <li><strong>3NF (Third Normal Form):</strong> Primary Key မဟုတ်သော Column အချင်းချင်း မှီခိုနေခြင်း (Transitive Dependency) မရှိရပါ။ ဥပမာ - Product ID မှ Product Price ကို သိနိုင်ပါက Order Table ထဲတွင် Price ကို ထပ်မထည့်ဘဲ Product Table တွင်သာ ထားရမည်။</li>
+            <li><strong>Performance vs Normalization (Denormalization):</strong> 3NF အထိ တင်းကျပ်စွာ ခွဲထုတ်ထားပါက Join များလွန်း၍ Read Speed နှေးတတ်ရာ Read-heavy အခြေအနေများတွင် တမင်တကာ Data ပေါင်းသိမ်းရန် (Denormalization) ကိုလည်းချိန်ဆ စဉ်းစားရသည်။</li>
+        </ul>
+    </div>
+
+    <!-- Tab 2: Semi-Structured Data -->
+    <div id="tab2" class="tab-content">
+        <h2>Semi-Structured Data (တစ်စိတ်တစ်ပိုင်း ဖွဲ့စည်းပုံကျသော ဒေတာ)</h2>
+        <p>တင်းကျပ်တဲ့ Table Schema မရှိပေမယ့် Key-Value pairs တွေ၊ Hierarchy (အထက်အောက် အဆင့်ဆင့်) တွေနဲ့ ဖွဲ့စည်းထားတဲ့ ဒေတာဖြစ်ပါတယ်။</p>
+        <ul>
+            <li><strong>Characteristics:</strong> JSON, XML နဲ့ NoSQL (MongoDB) Collection တွေမှာ အသုံးများသည်။ Field အသစ်တွေ အလွယ်တကူ ထပ်တိုးလို့ရသည်။</li>
+            <li><strong>Design Core:</strong> Document Modeling (Embedding vs Referencing) နဲ့ Indexing Strategies တွေကို အသုံးပြုရသည်။</li>
+        </ul>
+        <pre>{
+  "userId": 1,
+  "name": "Mg Mg",
+  "preferences": {
+    "theme": "dark",
+    "notifications": true
+  }
+}</pre>
+    </div>
+
+    <!-- Tab 3: Unstructured Data -->
+    <div id="tab3" class="tab-content">
+        <h2>Unstructured Data (ဖွဲ့စည်းပုံမကျသော ဒေတာ)</h2>
+        <p>ကြိုတင်သတ်မှတ်ထားတဲ့ Schema သို့မဟုတ် Data Model လုံးဝမရှိဘဲ သဘာဝအတိုင်း တည်ရှိနေတဲ့ ဒေတာအမျိုးအစား ဖြစ်ပါတယ်။</p>
+        <ul>
+            <li><strong>Characteristics:</strong> Text files, PDF, Audio, Video နဲ့ DICOM Medical Image တွေ ပါဝင်ပါတယ်။ စုစုပေါင်း Enterprise Data ၏ ၈၀% ကျော်ရှိသည်။</li>
+            <li><strong>Design Core:</strong> Object Storage (Cloudflare R2, AWS S3) တွေမှာ တိုက်ရိုက်သိမ်းဆည်းပြီး Metadata တွေကို Structured Database မှာ Index ပြန်လုပ်ရပါတယ်။</li>
+        </ul>
+        <div class="highlight-box">
+            <strong>Storage Strategy:</strong> ဖိုင်များကို Object Storage တွင် သိမ်းပြီး Database တွင် URL သို့မဟုတ် File Path ကိုသာ သိမ်းဆည်းခြင်း။
+        </div>
+    </div>
+
+    <!-- Tab 4: Array & Object Array -->
+    <div id="tab4" class="tab-content">
+        <h2>Array & Object Array (အေအေးနှင့် အော့ဘ်ဂျက်အေအေး)</h2>
+        <p>Programming နဲ့ Semi-structured data တွေမှာ အချက်အလက်အမြောက်အမြားကို စုစည်းသိမ်းဆည်းဖို့ အသုံးအများဆုံး structure တွေ ဖြစ်ပါတယ်။</p>
+        
+        <p><strong>1. Simple Array ဥပမာ (String/Number Array):</strong></p>
+        <pre>const roles = ["Admin", "Editor", "Viewer"];</pre>
+
+        <p><strong>2. Object Array ဥပမာ (Complex Data Structure):</strong></p>
+        <pre>[
+  {
+    "productId": 101,
+    "name": "Laptop",
+    "price": 1500000,
+    "tags": ["electronics", "computers"]
+  },
+  {
+    "productId": 102,
+    "name": "Mouse",
+    "price": 25000,
+    "tags": ["accessories", "wireless"]
+  }
+]</pre>
+    </div>
+
+    <!-- Tab 5: Transition to Big Data -->
+    <div id="tab5" class="tab-content">
+        <h2>From Data Types to Big Data (ဘယ်လို Big Data ဖြစ်လာသလဲ)</h2>
+        <p>အထက်ပါ Structured၊ Semi-structured နဲ့ Unstructured ဒေတာတွေဟာ သာမန် Single Database တွေမှာ မဆံ့တော့လောက်အောင် <strong>Volume (ပမာဏကြီးမားခြင်း)</strong>၊ <strong>Velocity (မြန်ဆန်စွာ ဝင်ရောက်လာခြင်း)</strong> နဲ့ <strong>Variety (အမျိုးအစားစုံလင်ခြင်း)</strong> ဆိုတဲ့ 3Vs လက္ခဏာတွေနဲ့ ပြည့်လာတဲ့အခါ Big Data အဖြစ်သို့ ကူးပြောင်းသွားပါတယ်။</p>
+        
+        <table>
+            <tr>
+                <th>Data Type</th>
+                <th>How it transforms to Big Data?</th>
+            </tr>
+            <tr>
+                <td>Structured Data</td>
+                <td>သန်းပေါင်းများစွာသော User Transactions တွေနေ့စဉ်ဝင်လာတဲ့အခါ (Distributed Databases - Cassandra, PostgreSQL Sharding) လိုအပ်လာပါတယ်။</td>
+            </tr>
+            <tr>
+                <td>Semi-Structured</td>
+                <td>IoT Sensors တွေနဲ့ Web Logs တွေကနေ JSON/Log stream တွေ တစ်စက္ကန့်ကို ယူနစ်သန်းချီဝင်လာခြင်း (Kafka, MongoDB Clusters)။</td>
+            </tr>
+            <tr>
+                <td>Unstructured</td>
+                <td>ဗီဒီယိုဖိုင်များ၊ မြို့ပြ CCTV ရုပ်သံများနှင့် ဆေးဘက်ဆိုင်ရာ DICOM Imaging ဖိုင်များ Petabytes ပမာဏအထိ စုပုံလာခြင်း (Data Lakes)။</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Tab 6: What's Next? (ဆက်လက်လုပ်ဆောင်နိုင်သော အရာများ) -->
+    <div id="tab6" class="tab-content">
+        <h2>What's Next? (ဘာတွေ ဆက်လုပ်လို့ရလဲ)</h2>
+        <p>Big Data အဆင့်ကို ရောက်ရှိသွားတဲ့အခါ အောက်ပါ Modern Architecture တွေနဲ့ AI Workflow တွေကို ဆက်လက်တည်ဆောက်နိုင်ပါတယ် -</p>
+        <ul>
+            <li><strong>Data Pipelines (ETL / ELT):</strong> Apache Airflow, n8n သို့မဟုတ် Kafka ကိုသုံးပြီး Data တွေကို Extract လုပ်၊ Transform လုပ်ကာ Data Warehouse တွေဆီ ပို့ဆောင်ခြင်း။</li>
+            <li><strong>Data Lakehouse Architecture:</strong> Structured နဲ့ Unstructured ဒေတာတွေကို တစ်နေရာတည်းမှာ ပေါင်းစပ်သိမ်းဆည်းပေးတဲ့ Delta Lake / Apache Iceberg နည်းပညာများ အသုံးပြုခြင်း။</li>
+            <li><strong>Vector Embeddings & RAG Systems:</strong> Unstructured text တွေကို Vectorize လုပ်ပြီး Cloudflare Vectorize သို့မဟုတ် Pinecone ထဲသိမ်းကာ AI Chatbot တွေနဲ့ ချိတ်ဆက်ခြင်း။</li>
+            <li><strong>Business Intelligence (BI):</strong> Metabase သို့မဟုတ် Apache Superset တို့ကို အသုံးပြုပြီး Dashboard တွေပေါ်တင်ကာ Data Analytics ထုတ်ခြင်း။</li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    function switchTab(evt, tabId) {
+        // Hide all tab contents
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.remove('active'));
+
+        // Remove active class from all buttons
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        // Show the current tab and add active class to clicked button
+        document.getElementById(tabId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+</script>
+
+</body>
+</html>

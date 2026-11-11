@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI/UX Design Pipeline & Dev Handover Master Guide</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: #e2e8f0;
+      --code-bg: #1e293b;
+      --code-text: #f8fafc;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--surface);
+      padding: 40px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: var(--text);
+      border-bottom: 3px solid var(--primary);
+      padding-bottom: 12px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: var(--primary-dark);
+      margin-top: 36px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 16px;
+      color: var(--text-muted);
+    }
+
+    .pipeline-flow {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      padding: 16px;
+      border-radius: var(--radius);
+      text-align: center;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+    }
+
+    ol, ul {
+      margin-bottom: 20px;
+      padding-left: 24px;
+      color: var(--text-muted);
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    pre {
+      background-color: var(--code-bg);
+      color: var(--code-text);
+      padding: 18px;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      font-family: "Fira Code", Monaco, Consolas, "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    code {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Monaco, Consolas, monospace;
+      font-size: 0.88em;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .checklist input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+      .container {
+        padding: 20px;
+      }
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>UI/UX Design Pipeline & Dev Handover Master Guide[cite: 2]</h1>
+
+    <!-- 1. Core Pipeline -->
+    <h2>၁။ အဓိက လုပ်ငန်းစဉ် အကျဉ်းချုပ် (Executive Summary & Core Pipeline)[cite: 2]</h2>
+    <div class="pipeline-flow">
+      User Requirements &rarr; User Flow &rarr; Lo-Fi Wireframe &rarr; Hi-Fi Design System &rarr; Dev Handover[cite: 2]
+    </div>
+    <ol>
+      <li><strong>User Requirements:</strong> ပစ်မှတ်ထားသော အသုံးပြုသူများ၊ ၎င်းတို့၏ အခက်အခဲများ (pain points)၊ အဓိက စီးပွားရေးလုပ်ငန်းဆောင်တာများနှင့် နည်းပညာပိုင်းဆိုင်ရာ ကန့်သတ်ချက်များကို သတ်မှတ်ခြင်း။[cite: 2]</li>
+      <li><strong>User Flow Diagramming:</strong> အမြင်ပိုင်းဆိုင်ရာ ဒီဇိုင်းများ မဆွဲမီ ယုတ္တိကျသော သွားလာမှု လမ်းကြောင်းများ၊ အသုံးပြုသူ၏ ဆုံးဖြတ်ချက်ချရမည့် နေရာများနှင့် မျက်နှာပြင်ပြောင်းလဲမှုများကို ပုံဖော်ရေးဆွဲခြင်း။[cite: 2]</li>
+      <li><strong>Low-Fidelity (Lo-Fi) Wireframing:</strong> အမြင်အာရုံ အနှောင့်အယှက်များ မပါဝင်ဘဲ သတင်းအချက်အလက် တည်ဆောက်ပုံကို အတည်ပြုရန် အဖြူအမည်း (grayscale) အကြမ်းဖျင်း တည်ဆောက်ပုံများကို ရေးဆွဲခြင်း။[cite: 2]</li>
+      <li><strong>High-Fidelity (Hi-Fi) Design:</strong> Auto-layout၊ design tokens၊ responsive breakpoints များနှင့် အခြေအနေပြောင်းလဲမှုများ (interactive state variants) ကို အသုံးပြု၍ Figma တွင် လက်တွေ့ထုတ်လုပ်ရန် အသင့်ဖြစ်သော အချောသတ် မျက်နှာပြင်များကို တည်ဆောက်ခြင်း။[cite: 2]</li>
+      <li><strong>Dev Handover & Documentation:</strong> အမြင်ပိုင်းဆိုင်ရာ ဒီဇိုင်းများကို software engineer များအတွက် လက်တွေ့လုပ်ဆောင်နိုင်သော သတ်မှတ်ချက်များ၊ tokens များနှင့် asset pipelines များအဖြစ်သို့ ပြောင်းလဲပေးခြင်း။[cite: 2]</li>
+    </ol>
+
+    <!-- 2. SDLC & Sequence Diagram Alignment -->
+    <h2>၂။ SDLC နှင့် Sequence Diagram ချိတ်ဆက်မှု (SDLC & Sequence Diagram Alignment)[cite: 2]</h2>
+    <p>User Requirements မှ UI State Flows သို့ ပြောင်းလဲရာတွင် UI/UX designer များအနေဖြင့် မျက်နှာပြင် အခြေအနေ (screen states) များကို နည်းပညာပိုင်းဆိုင်ရာ sequence diagram များနှင့် တိုက်ရိုက် ချိတ်ဆက်စဉ်းစားရပါမည်-[cite: 2]</p>
+    <pre><code>[User Action] ──► (Frontend UI) ──► [API Request] ──► (Backend Engine) ──► [DB Query]
+                                                                                │
+[Render State] ◄── (Update UI) ◄── [JSON Response] ◄────────────────────────────┘</code></pre>
+
+    <h3>API Sequence နှင့် UI States နှိုင်းယှဉ်ချက် (Mapping Matrix)[cite: 2]</h3>
+    <ul>
+      <li><strong>Request Trigger:</strong> ခလုတ်များ၊ ဖောင်တင်ခြင်းများ၊ လက်ဟန်အမူအရာများ (onClick, onSubmit)။[cite: 2]</li>
+      <li><strong>In-Flight State:</strong> Skeleton Loaders များ၊ လုပ်ဆောင်နေကြောင်းပြသသည့် အရာများ၊ ယာယီပိတ်ထားသော ခလုတ်များ (isLoading: true)။[cite: 2]</li>
+      <li><strong>Success State:</strong> အသိပေးစာများ (Toast Notifications)၊ မျက်နှာပြင် ကူးပြောင်းခြင်းများ၊ ဒေတာများကို ပြသခြင်း (status: 200)။[cite: 2]</li>
+      <li><strong>Failure / Edge Case:</strong> Error ပြသသည့် Box များ၊ စာသားနှင့်တွဲလျက်ပါသော အမှားပြစာများ၊ ပြန်လည်ကြိုးစားရန် ခလုတ်များ (status: 4xx / 5xx)။[cite: 2]</li>
+    </ul>
+
+    <!-- 3. User Flow Standard Specifications -->
+    <h2>၃။ User Flow ရေးဆွဲခြင်း စံသတ်မှတ်ချက်များ (User Flow Standard Specifications)[cite: 2]</h2>
+    <p>User flow diagram များသည် layout ပုံကြမ်းများ မရေးဆွဲမီ ဆော့ဖ်ဝဲ၏ တည်ဆောက်ပုံကို ပုံဖော်ပေးပါသည်။[cite: 2]</p>
+    
+    <h3>Flowchart သင်္ကေတများနှင့် အဓိပ္ပာယ်သတ်မှတ်ချက်များ[cite: 2]</h3>
+    <ul>
+      <li><strong>ဘဲဥပုံ / အဝိုင်း (<code>Start / End</code>):</strong> အက်ပ် စတင်သည့်နေရာ (ဥပမာ - <code>Launch App</code>) သို့မဟုတ် ပြီးဆုံးသည့် အခြေအနေ (ဥပမာ - <code>Order Completed</code>) ကို ညွှန်ပြသည်။[cite: 2]</li>
+      <li><strong>ထောင့်မှန်စတုဂံ (<code>Screen / Page</code>):</strong> သီးခြား UI မျက်နှာပြင်တစ်ခု (ဥပမာ - <code>Item Detail Screen</code>, <code>Checkout Page</code>) ကို ကိုယ်စားပြုသည်။[cite: 2]</li>
+      <li><strong>စိန်ပုံစံ (<code>Decision Point</code>):</strong> ယုတ္တိပိုင်းဆိုင်ရာ လမ်းခွဲမှု သို့မဟုတ် အခြေအနေ စစ်ဆေးမှုများ (ဥပမာ - <code>Is User Authenticated?</code> &rarr; <code>Yes / No</code>) ကို အကဲဖြတ်သည်။[cite: 2]</li>
+      <li><strong>အနားပြိုင်စတုဂံ (<code>Data Input / Output</code>):</strong> အသုံးပြုသူ ထည့်သွင်းရမည့် အချက်အလက်များ သို့မဟုတ် ဒေတာများ (ဥပမာ - <code>Enter Payment Slip</code>, <code>OTP Input</code>) ကို ညွှန်ပြသည်။[cite: 2]</li>
+      <li><strong>မြား (<code>User Action / Direction</code>):</strong> အသုံးပြုသူ၏ လုပ်ဆောင်ချက်များ၊ လက်ဟန်များ သို့မဟုတ် အလိုအလျောက် မျက်နှာပြင် ကူးပြောင်းမှုများကို ညွှန်ပြသည်။[cite: 2]</li>
+    </ul>
+
+    <h3>E-Commerce Flow ပုံစံ ဥပမာ[cite: 2]</h3>
+    <pre><code>( Launch App )
+      │
+      ▼
+[ Home Screen ] ────► [ Search / Category ] ────► [ Item Detail View ]
+                                                          │
+                                                    (Add to Cart)
+                                                          │
+                                                          ▼
+                                                   [ Cart Screen ]
+                                                          │
+                                                    (Checkout CTA)
+                                                          │
+                                                          ▼
+                                               ◇ Is Authenticated? ◇
+                                                /                 \
+                                         (No)  /                   \ (Yes)
+                                              ▼                     ▼
+                                    [ Login / Register ] ──► [ Checkout Screen ]
+                                                                    │
+                                                                    ▼
+                                                            [ Payment Gateway ]
+                                                                    │
+                                                                    ▼
+                                                          [ Order Confirmation ]
+                                                                    │
+                                                                    ▼
+                                                           [ Order Tracking ]</code></pre>
+
+    <!-- 4. Design System Architecture -->
+    <h2>၄။ ဒီဇိုင်းစနစ် တည်ဆောက်ပုံနှင့် Variables များ (Design System Architecture & Variables)[cite: 2]</h2>
+    <p>Developer များအတွက် အဆင်ပြေစေမည့် Figma တည်ဆောက်ပုံဖြစ်စေရန် Design Variable များသည် CSS Custom Properties, Tailwind CSS config, သို့မဟုတ် mobile UI framework များနှင့် တိုက်ရိုက်ချိတ်ဆက်နိုင်သော <strong>Two-Tier Token System (အလွှာနှစ်ခုပါသော Token စနစ်)</strong> အတိုင်း သတ်မှတ်ရပါမည်။[cite: 2]</p>
+
+    <div class="pipeline-flow">
+      [ Primitive Value ] &rarr; [ Semantic Design Token ] &rarr; [ UI Component Usage ][cite: 2]
+    </div>
+
+    <h3>Variable အမည်ပေးခြင်း စံနှုန်းများ[cite: 2]</h3>
+    <h4>၁. Color Tokens[cite: 2]</h4>
+    <ul>
+      <li><strong>Primitives (Base Scale):</strong> <code>blue/100</code>, <code>blue/500</code>, <code>slate/900</code>[cite: 2]</li>
+      <li><strong>Semantic Tokens:</strong>[cite: 2]
+        <ul>
+          <li><code>color/brand/primary</code> &rarr; <code>blue/500</code> သို့ ချိတ်ဆက်သည်။[cite: 2]</li>
+          <li><code>color/text/primary</code> &rarr; <code>slate/900</code> သို့ ချိတ်ဆက်သည်။[cite: 2]</li>
+          <li><code>color/bg/surface</code> &rarr; <code>white</code> သို့ ချိတ်ဆက်သည်။[cite: 2]</li>
+          <li><code>color/border/default</code> &rarr; <code>slate/200</code> သို့ ချိတ်ဆက်သည်။[cite: 2]</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h4>၂. Spacing Tokens (8-Point System)[cite: 2]</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Token Name</th>
+          <th>Value (px)</th>
+          <th>Rem Equivalent</th>
+          <th>CSS Output Mapping</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>spacing/xs</code></td>
+          <td>4px</td>
+          <td>0.25rem</td>
+          <td><code>var(--spacing-xs)</code></td>
+        </tr>
+        <tr>
+          <td><code>spacing/sm</code></td>
+          <td>8px</td>
+          <td>0.5rem</td>
+          <td><code>var(--spacing-sm)</code></td>
+        </tr>
+        <tr>
+          <td><code>spacing/md</code></td>
+          <td>16px</td>
+          <td>1.0rem</td>
+          <td><code>var(--spacing-md)</code></td>
+        </tr>
+        <tr>
+          <td><code>spacing/lg</code></td>
+          <td>24px</td>
+          <td>1.5rem</td>
+          <td><code>var(--spacing-lg)</code></td>
+        </tr>
+        <tr>
+          <td><code>spacing/xl</code></td>
+          <td>32px</td>
+          <td>2.0rem</td>
+          <td><code>var(--spacing-xl)</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 5. Figma Auto-Layout to Flexbox Mapping -->
+    <h2>၅။ Figma Auto-Layout မှ Flexbox သို့ နှိုင်းယှဉ်ချက် (Figma Auto-Layout to Flexbox Mapping)[cite: 2]</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Figma Auto-Layout Setting</th>
+          <th>CSS Flexbox Equivalent</th>
+          <th>Flutter Equivalent</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Vertical Direction</strong></td>
+          <td><code>flex-direction: column</code></td>
+          <td><code>Column()</code></td>
+        </tr>
+        <tr>
+          <td><strong>Horizontal Direction</strong></td>
+          <td><code>flex-direction: row</code></td>
+          <td><code>Row()</code></td>
+        </tr>
+        <tr>
+          <td><strong>Hug Contents</strong></td>
+          <td><code>width: fit-content</code></td>
+          <td><code>MainAxisSize.min</code></td>
+        </tr>
+        <tr>
+          <td><strong>Fill Container</strong></td>
+          <td><code>width: 100% / flex: 1</code></td>
+          <td><code>Expanded() / Flexible()</code></td>
+        </tr>
+        <tr>
+          <td><strong>Gap</strong></td>
+          <td><code>gap: var(--spacing-md)</code></td>
+          <td><code>SizedBox(width/height)</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 6. Developer Handover Protocol -->
+    <h2>၆။ Developer ထံ လွှဲပြောင်းခြင်းဆိုင်ရာ စံနှုန်းများ (Developer Handover Protocol & Specs)[cite: 2]</h2>
+    <ul class="checklist">
+      <li><input type="checkbox" checked> <strong>Variables & Tokens:</strong> အရောင်များ၊ ကွာဟချက်များ (gaps)၊ padding နှင့် ဖောင့်စတိုင်များ အားလုံးကို global variables များနှင့် ချိတ်ဆက်ထားရမည်။[cite: 2]</li>
+      <li><input type="checkbox" checked> <strong>Auto-Layout Verification:</strong> စာသားများ သို့မဟုတ် responsive card များတွင် ပုံသေ အရွယ်အစား (fixed-frame dimensions) များ မရှိစေရပါ။[cite: 2]</li>
+      <li><input type="checkbox" checked> <strong>Component Variants:</strong> UI အစိတ်အပိုင်းများတွင် အခြေအနေ အပြောင်းအလဲများ (<code>Default</code>, <code>Hover</code>, <code>Pressed</code>, <code>Disabled</code>, <code>Focus</code>) ပါဝင်ရမည်။[cite: 2]</li>
+      <li><input type="checkbox" checked> <strong>Asset Exporting:</strong> Icon များအားလုံးကို vector SVGs (<code>Fill: CurrentColor</code>) အဖြစ် သတ်မှတ်ထားပြီး ပုံများကို export ထုတ်နိုင်သော PNG/WebP အဖြစ် သတ်မှတ်ထားရမည်။[cite: 2]</li>
+      <li><input type="checkbox" checked> <strong>Edge Cases Covered:</strong> ဒေတာမရှိချိန် (<code>Empty Data</code>)၊ အင်တာနက်မရချိန် (<code>Network Error</code>) နှင့် ဒေတာဆွဲယူနေချိန် (<code>Loading Skeleton</code>) များအတွက် မျက်နှာပြင်များကို အတိအလင်း ရေးဆွဲထားရမည်။[cite: 2]</li>
+      <li><input type="checkbox" checked> <strong>Annotations Added:</strong> လုပ်ဆောင်ချက်ဆိုင်ရာ စည်းမျဉ်းများ (ဥပမာ - regex စစ်ဆေးမှုများ၊ ငွေကြေးပြသမှု ပုံစံများ၊ API လိုအပ်ချက်များ) ကို ရှင်းလင်းချက် မှတ်စုများ (sticky notes) ဖြင့် မှတ်တမ်းတင်ထားရမည်။[cite: 2]</li>
+    </ul>
+
+    <h3>ရှင်းလင်းချက် နမူနာကုဒ် (Sample Developer Annotation Code)[cite: 2]</h3>
+    <pre><code>/* Component: Primary Action Card */
+.card-container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);       /* 16px */
+  gap: var(--spacing-sm);           /* 8px */
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-md);  /* 8px */
+  border: 1px solid var(--color-border-default);
+}
+
+.card-title {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);  /* 18px */
+  font-weight: 600;
+}</code></pre>
+
+  </div>
+
+</body>
+</html>
+```<FollowUp></FollowUp><ElicitationsGroup></ElicitationsGroup>
